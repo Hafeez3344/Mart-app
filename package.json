@@ -1,0 +1,19 @@
+{
+  "name": "super-mart-pos",
+  "version": "1.0.0",
+  "description": "Super Mart Point of Sale & Retail Management Desktop Application",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "node_modules\\electron\\dist\\electron.exe .",
+    "electron": "node_modules\\electron\\dist\\electron.exe .",
+    "electron:dev": "node_modules\\electron\\dist\\electron.exe .",
+    "server": "cd server && node src/server.js",
+    "client": "cd client && node node_modules/next/dist/bin/next dev"
+  },
+  "keywords": ["pos", "supermarket", "retail", "electron", "nextjs", "express", "postgresql"],
+  "author": "Super Mart POS",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^45.3.3"
+  }
+}

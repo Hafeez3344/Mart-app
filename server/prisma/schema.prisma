@@ -1,0 +1,623 @@
+// Prisma Schema for Mart Point of Sale (POS) System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// -------------------------------------------------------------
+// USER ROLES & AUTHENTICATION
+// -------------------------------------------------------------
+
+enum Role {
+  ADMIN
+  MANAGER
+  CASHIER
+  STOCK_KEEPER
+  ACCOUNTANT
+  STAFF
+}
+
+enum SalaryStatus {
+  PAID
+  PENDING
+  PROCESSING
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  ONLINE
+  CREDIT
+  SPLIT
+}
+
+model User {
+  id               String          @id @default(uuid())
+  email            String          @unique
+  password         String
+  name             String
+  role             Role            @default(CASHIER)
+  active           Boolean         @default(true)
+  phone            String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  staff            Staff?
+  salesProcessed   Sale[]          @relation("CashierSales")
+  shifts           RegisterShift[] @relation("CashierShifts")
+
+  @@map("users")
+}
+
+// -------------------------------------------------------------
+// STORE DEPARTMENTS & STAFF / HR
+// -------------------------------------------------------------
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  code        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  staffMembers Staff[]
+
+  @@map("departments")
+}
+
+model Staff {
+  id           String      @id @default(uuid())
+  userId       String      @unique
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeId   String      @unique
+  firstName    String
+  lastName     String
+  email        String      @unique
+  phone        String?
+  designation  String
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  baseSalary   Float
+  joiningDate  DateTime    @default(now())
+  status       String      @default("ACTIVE")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  attendance   StaffAttendance[]
+  advances     StaffAdvance[]
+  salaryRecords SalaryRecord[]
+
+  @@map("staff")
+}
+
+model StaffAttendance {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  date      DateTime
+  status    String   @default("PRESENT") // PRESENT, ABSENT, LEAVE, HALF_DAY
+  checkIn   String?
+  checkOut  String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([staffId, date])
+  @@map("staff_attendance")
+}
+
+model StaffAdvance {
+  id           String   @id @default(uuid())
+  staffId      String
+  staff        Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  amount       Float
+  date         DateTime @default(now())
+  month        Int
+  year         Int
+  reason       String?
+  status       String   @default("PENDING") // PENDING, DEDUCTED, REPAID
+  repaidAmount Float    @default(0.00)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("staff_advances")
+}
+
+model SalaryRecord {
+  id               String       @id @default(uuid())
+  staffId          String
+  staff            Staff        @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  month            Int
+  year             Int
+  baseSalary       Float
+  bonus            Float        @default(0.00)
+  deductions       Float        @default(0.00)
+  advancesDeducted Float        @default(0.00)
+  netSalary        Float
+  status           SalaryStatus @default(PENDING)
+  paymentDate      DateTime?
+  paymentMethod    String?      @default("CASH")
+  notes            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@unique([staffId, month, year])
+  @@map("salary_records")
+}
+
+// -------------------------------------------------------------
+// PRODUCT CATALOG & INVENTORY MANAGEMENT
+// -------------------------------------------------------------
+
+model ProductCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  color       String    @default("#10b981")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+
+  @@map("product_categories")
+}
+
+model Brand {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+
+  @@map("brands")
+}
+
+model Unit {
+  id           String           @id @default(uuid())
+  name         String           @unique
+  shortCode    String           @unique
+  allowDecimal Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  conversionsFrom UnitConversion[] @relation("FromUnit")
+  conversionsTo   UnitConversion[] @relation("ToUnit")
+
+  @@map("units")
+}
+
+model UnitConversion {
+  id         String   @id @default(uuid())
+  fromUnitId String
+  fromUnit   Unit     @relation("FromUnit", fields: [fromUnitId], references: [id], onDelete: Cascade)
+  toUnitId   String
+  toUnit     Unit     @relation("ToUnit", fields: [toUnitId], references: [id], onDelete: Cascade)
+  factor     Float
+  createdAt  DateTime @default(now())
+
+  @@unique([fromUnitId, toUnitId])
+  @@map("unit_conversions")
+}
+
+model Product {
+  id              String           @id @default(uuid())
+  barcode         String?          @unique
+  sku             String?          @unique
+  name            String
+  description     String?
+  categoryId      String?
+  categoryRef     ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category        String           @default("GROCERY")
+  brand           String?
+  brandId         String?
+  brandRef        Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  costPrice       Float            @default(0.00) // Wholesale / Supplier purchase cost
+  retailPrice     Float            @default(0.00) // Standard POS selling price
+  wholesalePrice  Float?           @default(0.00) // Bulk / Wholesale price
+  stockQuantity   Float            @default(0.00) // Real-time available stock
+  minStockAlert   Float            @default(10.00) // Threshold for low stock warning
+  unit            String           @default("Pcs") // Pcs, Kg, Gram, Liter, Pack, Box, Carton
+  allowFractional Boolean          @default(false) // True for items sold by weight/volume (e.g. 1.25 kg)
+  batchNo         String?
+  expiryDate      DateTime?
+  supplierId      String?
+  supplier        Supplier?        @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  isActive        Boolean          @default(true)
+  imageUrl        String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  saleItems       SaleItem[]
+  purchaseItems   PurchaseInvoiceItem[]
+  returnItems     SaleReturnItem[]
+  adjustments     StockAdjustment[]
+  movements       StockMovement[]
+
+  @@index([barcode])
+  @@index([sku])
+  @@index([name])
+  @@index([category])
+  @@map("products")
+}
+
+model StockMovement {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type         String   // SALE, PURCHASE, RETURN, ADJUSTMENT_DAMAGE, ADJUSTMENT_EXPIRED, RESTOCK
+  quantity     Float    // Positive for additions, negative for deductions
+  balanceAfter Float    @default(0.00)
+  referenceNo  String?  // InvoiceNo or PONo
+  reason       String?
+  performedBy  String?  @default("System")
+  createdAt    DateTime @default(now())
+
+  @@index([productId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("stock_movements")
+}
+
+model StockAdjustment {
+  id         String   @id @default(uuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type       String   @default("DAMAGE") // DAMAGE, EXPIRED, SHRINKAGE, AUDIT_CORRECTION, RESTOCK
+  quantity   Float
+  previousQty Float   @default(0.00)
+  newQty     Float    @default(0.00)
+  reason     String?
+  adjustedBy String?  @default("Admin")
+  createdAt  DateTime @default(now())
+
+  @@map("stock_adjustments")
+}
+
+// -------------------------------------------------------------
+// CUSTOMERS & STORE CREDIT (KHATA)
+// -------------------------------------------------------------
+
+model Customer {
+  id             String            @id @default(uuid())
+  name           String
+  phone          String            @unique
+  email          String?
+  address        String?
+  creditLimit    Float             @default(50000.00)
+  currentBalance Float             @default(0.00) // Positive means customer owes store (Due)
+  loyaltyPoints  Float             @default(0.00)
+  notes          String?
+  isActive       Boolean           @default(true)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  sales          Sale[]
+  payments       CustomerPayment[]
+
+  @@index([name])
+  @@index([phone])
+  @@map("customers")
+}
+
+model CustomerPayment {
+  id            String    @id @default(uuid())
+  customerId    String
+  customer      Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  amount        Float
+  paymentMethod String    @default("CASH") // CASH, BANK_TRANSFER, ONLINE, CARD
+  referenceNo   String?
+  notes         String?
+  receivedBy    String?   @default("Cashier")
+  paymentDate   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+
+  @@map("customer_payments")
+}
+
+// -------------------------------------------------------------
+// SUPPLIERS & STOCK PURCHASES (STOCK-IN)
+// -------------------------------------------------------------
+
+model Supplier {
+  id             String            @id @default(uuid())
+  companyName    String            @unique
+  contactPerson  String?
+  phone          String?
+  email          String?
+  address        String?
+  payableBalance Float             @default(0.00) // What the mart owes the supplier
+  taxNo          String?
+  notes          String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  products       Product[]
+  purchases      PurchaseInvoice[]
+  payments       SupplierPayment[]
+
+  @@map("suppliers")
+}
+
+model PurchaseInvoice {
+  id            String                @id @default(uuid())
+  invoiceNo     String                @unique // e.g. PO-2026-0001
+  supplierId    String
+  supplier      Supplier              @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  totalAmount   Float
+  paidAmount    Float                 @default(0.00)
+  balance       Float                 @default(0.00)
+  paymentStatus String                @default("PENDING") // PAID, PARTIAL, PENDING
+  paymentMethod String                @default("CASH")
+  description   String?
+  purchaseDate  DateTime              @default(now())
+  receivedBy    String?               @default("Store Manager")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  items         PurchaseInvoiceItem[]
+
+  @@map("purchase_invoices")
+}
+
+model PurchaseInvoiceItem {
+  id          String          @id @default(uuid())
+  purchaseId  String
+  purchase    PurchaseInvoice @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName String
+  quantity    Float           @default(1.0)
+  unitCost    Float           @default(0.00)
+  totalPrice  Float           @default(0.00)
+  unit        String?         @default("Pcs")
+
+  @@map("purchase_invoice_items")
+}
+
+model SupplierPayment {
+  id            String   @id @default(uuid())
+  supplierId    String
+  supplier      Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  amount        Float
+  paymentMethod String   @default("CASH") // CASH, CHEQUE, BANK_TRANSFER
+  referenceNo   String?
+  notes         String?
+  paymentDate   DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  @@map("supplier_payments")
+}
+
+// -------------------------------------------------------------
+// POINT OF SALE (POS) TRANSACTIONS & SALES
+// -------------------------------------------------------------
+
+model Sale {
+  id            String         @id @default(uuid())
+  invoiceNo     String         @unique // e.g. INV-2026-00001
+  customerId    String?
+  customer      Customer?      @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName  String         @default("Walk-In Customer")
+  customerPhone String?
+  subtotal      Float          @default(0.00)
+  discount      Float          @default(0.00)
+  discountType  String         @default("FLAT") // FLAT, PERCENT
+  tax           Float          @default(0.00)
+  netTotal      Float          @default(0.00)
+  paidAmount    Float          @default(0.00)
+  changeDue     Float          @default(0.00)
+  paymentMethod String         @default("CASH") // CASH, CARD, ONLINE, CREDIT, SPLIT
+  status        String         @default("PAID") // PAID, PARTIAL, DUE, RETURNED, VOID
+  notes         String?
+  cashierId     String?
+  cashier       User?          @relation("CashierSales", fields: [cashierId], references: [id], onDelete: SetNull)
+  cashierName   String?        @default("Cashier")
+  isParked      Boolean        @default(false) // For held / parked bills
+  parkedName    String?
+  shiftId       String?
+  shift         RegisterShift? @relation(fields: [shiftId], references: [id], onDelete: SetNull)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  items         SaleItem[]
+  returns       SaleReturn[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([paymentMethod])
+  @@index([createdAt])
+  @@map("sales")
+}
+
+model SaleItem {
+  id          String   @id @default(uuid())
+  saleId      String
+  sale        Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName String
+  barcode     String?
+  quantity    Float    @default(1.0)
+  unit        String   @default("Pcs")
+  unitCost    Float    @default(0.00) // Captured for profit calculation
+  unitPrice   Float    @default(0.00)
+  discount    Float    @default(0.00)
+  totalPrice  Float    @default(0.00)
+
+  @@map("sale_items")
+}
+
+model SaleReturn {
+  id           String           @id @default(uuid())
+  returnNo     String           @unique // e.g. RET-2026-0001
+  saleId       String?
+  sale         Sale?            @relation(fields: [saleId], references: [id], onDelete: SetNull)
+  invoiceNo    String
+  customerName String           @default("Walk-In Customer")
+  customerPhone String?
+  totalRefund  Float            @default(0.00)
+  refundMethod String           @default("CASH") // CASH, STORE_CREDIT
+  reason       String?          @default("Customer Return / Exchange")
+  returnedBy   String?          @default("Cashier")
+  createdAt    DateTime         @default(now())
+
+  items        SaleReturnItem[]
+
+  @@map("sale_returns")
+}
+
+model SaleReturnItem {
+  id           String      @id @default(uuid())
+  returnId     String
+  returnOrder  SaleReturn  @relation(fields: [returnId], references: [id], onDelete: Cascade)
+  productId    String?
+  product      Product?    @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName  String
+  quantity     Float       @default(1.0)
+  unitPrice    Float       @default(0.00)
+  refundAmount Float       @default(0.00)
+
+  @@map("sale_return_items")
+}
+
+// -------------------------------------------------------------
+// CASH REGISTER & SHIFT DRAWER MANAGEMENT
+// -------------------------------------------------------------
+
+model RegisterShift {
+  id           String         @id @default(uuid())
+  shiftNo      String         @unique // e.g. SHIFT-20260401-01
+  cashierId    String
+  cashier      User           @relation("CashierShifts", fields: [cashierId], references: [id], onDelete: Cascade)
+  cashierName  String
+  openingCash  Float          @default(0.00) // Opening float amount
+  closingCash  Float?         // Actual cash counted at closing
+  expectedCash Float?         // Opening + Cash Sales + Cash In - Cash Out
+  difference   Float?         @default(0.00) // Surplus (+) or Deficit (-)
+  cashSales    Float          @default(0.00)
+  cardSales    Float          @default(0.00)
+  onlineSales  Float          @default(0.00)
+  creditSales  Float          @default(0.00)
+  cashIn       Float          @default(0.00)
+  cashOut      Float          @default(0.00)
+  status       String         @default("OPEN") // OPEN, CLOSED
+  openedAt     DateTime       @default(now())
+  closedAt     DateTime?
+  notes        String?
+
+  sales        Sale[]
+  movements    CashMovement[]
+
+  @@map("register_shifts")
+}
+
+model CashMovement {
+  id          String        @id @default(uuid())
+  shiftId     String
+  shift       RegisterShift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  type        String        // CASH_IN, CASH_OUT
+  amount      Float
+  reason      String
+  performedBy String?       @default("Cashier")
+  createdAt   DateTime      @default(now())
+
+  @@map("cash_movements")
+}
+
+// -------------------------------------------------------------
+// MART EXPENSES & ACCOUNTING
+// -------------------------------------------------------------
+
+model ExpenseCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+
+  expenses    Expense[]
+
+  @@map("expense_categories")
+}
+
+model Expense {
+  id            String           @id @default(uuid())
+  expenseNo     String?          @unique
+  title         String
+  amount        Float
+  categoryId    String?
+  categoryRef   ExpenseCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category      String           @default("OPERATIONAL")
+  paymentMethod String           @default("CASH")
+  paidTo        String?
+  referenceNo   String?
+  receiptImage  String?
+  expenseDate   DateTime         @default(now())
+  date          DateTime         @default(now())
+  isArchived    Boolean          @default(false)
+  notes         String?
+  recordedBy    String?          @default("Admin")
+  createdBy     String?          @default("Admin")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@map("expenses")
+}
+
+// -------------------------------------------------------------
+// MART STORE SETTINGS & HARDWARE CONFIGURATION
+// -------------------------------------------------------------
+
+model StoreSetting {
+  id               String   @id @default(uuid())
+  storeName        String   @default("Metro Super Mart & Grocers")
+  tagline          String   @default("Fresh Quality Products, Best Daily Prices")
+  phone            String   @default("+92 300 1234567")
+  email            String   @default("info@metromart.pk")
+  address          String   @default("Main Commercial Boulevard, Phase 4, City Center")
+  taxNumber        String   @default("NTN-5829104-1")
+  currencyCode     String   @default("PKR")
+  currencySymbol   String   @default("Rs.")
+  receiptHeader    String   @default("Thank you for shopping with us!")
+  receiptFooter    String   @default("Items can be exchanged within 7 days with valid receipt.")
+  printerType      String   @default("ESC_POS") // ESC_POS, PDF, BROWSER
+  paperWidth       Int      @default(80) // 58 or 80 mm
+  enableSound      Boolean  @default(true)
+  enableCashDrawer Boolean  @default(true)
+  cashDrawerCode   String   @default("27,112,0,25,250")
+  logoUrl          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("store_settings")
+}
+
+// -------------------------------------------------------------
+// SYSTEM AUDIT LOGGING
+// -------------------------------------------------------------
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  module    String
+  details   String?
+  userId    String?
+  userName  String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([module])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

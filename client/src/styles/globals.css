@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #5A9BD5;
+  --color-secondary: #1F3F66;
+  --color-tertiary: #B7D7F0;
+  --color-neutral: #FFFFFF;
+  --color-surface: #EDF6FF;
+
+  /* Legacy aliases */
+  --color-white: #FFFFFF;
+  --color-ice-tint: #EDF6FF;
+  --color-ice-soft: #B7D7F0;
+  --color-ice-medium: #5A9BD5;
+  --color-ice-navy: #1F3F66;
+}

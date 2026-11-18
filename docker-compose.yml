@@ -1,0 +1,35 @@
+services:
+  # 1. Local PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: mart-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: mart_pos_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Next.js Frontend Web Application Service
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: mart-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
