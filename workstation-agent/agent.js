@@ -1,6 +1,6 @@
 /**
- * CarePulse HMS - Lightweight Workstation Print Agent
- * Run this on any client computer (Front Desk PC, Pharmacy PC, Lab PC)
+ * Super Mart POS - Lightweight Workstation Print Agent
+ * Run this on any cashier workstation computer (Checkout Counter 1, Counter 2, etc.)
  * to enable instant, silent printing directly to that computer's local USB thermal printer.
  */
 

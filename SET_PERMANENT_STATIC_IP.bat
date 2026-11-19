@@ -1,11 +1,11 @@
 @echo off
 :: ============================================================================
-:: SET PERMANENT STATIC IP FOR HOSPITAL SERVER (ETHERNET)
+:: SET PERMANENT STATIC IP FOR SUPER MART POS SERVER (ETHERNET)
 :: Run as Administrator
 :: ============================================================================
 echo.
 echo =====================================================================
-echo    AL SHIFA HOSPITAL MANAGEMENT SYSTEM - PERMANENT STATIC IP TOOL
+echo    SUPER MART POINT OF SALE - PERMANENT STATIC IP TOOL
 echo =====================================================================
 echo.
 
@@ -42,12 +42,32 @@ netsh interface ip add dns name="Ethernet" 8.8.8.8 index=2
 powershell -NoProfile -Command "Get-NetConnectionProfile -InterfaceAlias 'Ethernet' | Set-NetConnectionProfile -NetworkCategory Private"
 echo.
 echo [DONE] Permanent Static IP set to: 192.168.10.20
-echo You can now access HMS at: http://192.168.10.20:3000
+echo You can now access Super Mart POS at: http://192.168.10.20:3000
 goto end
 
 :set26
 echo.
 echo Setting Ethernet IP to 192.168.10.26 statically...
+netsh interface ip set address name="Ethernet" static 192.168.10.26 255.255.255.0 192.168.10.1 1
+netsh interface ip set dns name="Ethernet" static 192.168.10.1
+netsh interface ip add dns name="Ethernet" 8.8.8.8 index=2
+powershell -NoProfile -Command "Get-NetConnectionProfile -InterfaceAlias 'Ethernet' | Set-NetConnectionProfile -NetworkCategory Private"
+echo.
+echo [DONE] Permanent Static IP set to: 192.168.10.26
+echo You can now access Super Mart POS at: http://192.168.10.26:3000
+goto end
+
+:setdhcp
+echo.
+echo Resetting Ethernet IP to Automatic (DHCP)...
+netsh interface ip set address name="Ethernet" source=dhcp
+netsh interface ip set dns name="Ethernet" source=dhcp
+echo [DONE] Ethernet is now set to obtain IP automatically via DHCP.
+goto end
+
+:end
+echo.
+pause
 netsh interface ip set address name="Ethernet" static 192.168.10.26 255.255.255.0 192.168.10.1 1
 netsh interface ip set dns name="Ethernet" static 192.168.10.1
 netsh interface ip add dns name="Ethernet" 8.8.8.8 index=2

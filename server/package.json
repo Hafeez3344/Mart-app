@@ -1,7 +1,7 @@
 {
-  "name": "hospital-management-server",
+  "name": "super-mart-server",
   "version": "1.0.0",
-  "description": "Hospital Management System Express Backend",
+  "description": "Super Mart Point of Sale & Inventory Express API Server",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

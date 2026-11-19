@@ -92,13 +92,12 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/settings', settingsRoutes);
 
-// Compatibility alias for pharmacy and print
+// Hardware Printing Route
 try {
   app.use('/api/print', require('./routes/printRoutes'));
 } catch (e) {
   // Optional print service
 }
-app.use('/api/pharmacy', productRoutes); // Compatibility bridge
 
 // Welcome Root Route
 app.get('/', (req, res) => {
