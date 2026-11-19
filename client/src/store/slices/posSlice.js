@@ -99,3 +99,4 @@ export const {
 } = posSlice.actions;
 
 export default posSlice.reducer;
+

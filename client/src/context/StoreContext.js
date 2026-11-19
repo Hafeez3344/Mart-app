@@ -107,3 +107,4 @@ export const useHospital = useStore;
 export const useMart = useStore;
 export const HospitalProvider = StoreProvider;
 export default StoreContext;
+
