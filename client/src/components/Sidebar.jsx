@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useSidebar } from '../context/SidebarContext';
-import { useHospital } from '../context/HospitalContext';
+import { useStore } from '../context/StoreContext';
 import {
   ShoppingCart,
   LayoutDashboard,
@@ -136,7 +136,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { isOpen, closeSidebar } = useSidebar();
-  const { storeName } = useHospital();
+  const { storeName } = useStore();
 
   const isLinkActive = (href) => {
     if (href === '/pos' && pathname === '/pos') return true;

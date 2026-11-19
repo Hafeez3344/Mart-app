@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import api from '../lib/api';
 import { useCurrency } from '../context/CurrencyContext';
-import { useHospital } from '../context/HospitalContext';
+import { useStore } from '../context/StoreContext';
 import {
   Receipt,
   DollarSign,
@@ -45,7 +45,7 @@ import { printThermalRefundReceipt } from '../lib/thermalPrint';
 
 export default function PaymentHistoryView({ role = 'ADMIN' }) {
   const { formatAmount } = useCurrency();
-  const { hospitalName, hospitalAddress, hospitalPhone } = useHospital();
+  const { hospitalName, hospitalAddress, hospitalPhone } = useStore();
 
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('today'); // today, yesterday, weekly, monthly, all, custom

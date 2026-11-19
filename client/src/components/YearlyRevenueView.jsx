@@ -36,7 +36,7 @@ import {
   BadgeDollarSign
 } from 'lucide-react';
 import api from '../lib/api';
-import { useHospital } from '../context/HospitalContext';
+import { useStore } from '../context/StoreContext';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -44,7 +44,7 @@ const MONTH_NAMES = [
 ];
 
 export default function YearlyRevenueView({ basePath = '/admin' }) {
-  const { hospitalName, locationAddress, phone } = useHospital();
+  const { storeName, locationAddress, phone } = useStore();
 
   const currentSystemYear = new Date().getFullYear();
   const currentSystemMonth = new Date().getMonth() + 1; // 1-12
@@ -369,7 +369,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Hospital_Annual_Financial_Report_${selectedYear}.csv`);
+    link.setAttribute('download', `Super_Mart_Annual_Financial_Report_${selectedYear}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -429,8 +429,8 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
         </head>
         <body>
           <div class="header">
-            <h1>${hospitalName || 'HOSPITAL MANAGEMENT SYSTEM'}</h1>
-            <p>${locationAddress || 'Main Hospital Complex'} | Tel: ${phone || 'N/A'}</p>
+            <h1>${storeName || 'SUPER MART POINT OF SALE & INVENTORY'}</h1>
+            <p>${locationAddress || 'Main Commercial Boulevard'} | Tel: ${phone || 'N/A'}</p>
             <p style="font-size: 8.5pt; color: #94a3b8;">Official Certified Financial Audit Statement</p>
           </div>
 
@@ -545,13 +545,13 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             </thead>
             <tbody>
               <tr>
-                <td class="font-bold">Hospital General & Operating Expenses</td>
+                <td class="font-bold">Store General & Operating Expenses</td>
                 <td class="text-center">${month.expensesCount || 0} Vouchers</td>
                 <td class="text-right font-bold">${(month.hospitalExpenses || 0).toLocaleString()}</td>
                 <td class="text-right">${month.totalExpenses > 0 ? (((month.hospitalExpenses || 0) / month.totalExpenses) * 100).toFixed(1) : 0}%</td>
               </tr>
               <tr>
-                <td class="font-bold">Staff Salaries & Doctor Payroll Disbursed</td>
+                <td class="font-bold">Staff Salaries & Payroll Disbursed</td>
                 <td class="text-center">${month.salariesCount || 0} Disbursed</td>
                 <td class="text-right font-bold">${(month.salariesDisbursed || 0).toLocaleString()}</td>
                 <td class="text-right">${month.totalExpenses > 0 ? (((month.salariesDisbursed || 0) / month.totalExpenses) * 100).toFixed(1) : 0}%</td>
@@ -578,16 +578,16 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             </div>
             <div class="sig-box">
               <div class="sig-line"></div>
-              <div class="sig-title">Internal Auditor</div>
+              <div class="sig-title">Store Manager</div>
             </div>
             <div class="sig-box">
               <div class="sig-line"></div>
-              <div class="sig-title">Chief Executive / Medical Director</div>
+              <div class="sig-title">Owner / Managing Director</div>
             </div>
           </div>
 
           <div style="text-align: center; margin-top: 25px; font-size: 8pt; color: #94a3b8;">
-            Generated on: ${new Date().toLocaleString()} • Hospital Management System Automated Audit
+            Generated on: ${new Date().toLocaleString()} • Super Mart POS Automated Financial Audit
           </div>
         </body>
       </html>
@@ -713,7 +713,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             <Receipt className="w-5 h-5" />
           </div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            Total Hospital Expenses
+            Total Store Expenses
           </span>
           <h2 className="text-2xl font-black tracking-tight text-rose-600 mt-1 mb-1">
             Rs. {(summary.totalExpenses || 0).toLocaleString()}
@@ -730,7 +730,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Hospital Net Profit (Remaining)
+              Store Net Profit (Remaining)
             </span>
             <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-md ${
               (summary.netProfit || 0) >= 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
@@ -900,7 +900,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
           <div>
             <h2 className="text-base font-bold text-[#1F3F66] flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#5A9BD5]" />
-              <span>12 Months Hospital Income & Expenses Calendar ({selectedYear})</span>
+              <span>12 Months Store Income & Expenses Calendar ({selectedYear})</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
               Full 12 calendar rows for each month • Click any row or &quot;Details&quot; button to view full income and expenses
@@ -909,7 +909,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#EDF6FF] text-[#1F3F66] text-xs font-bold rounded-lg border border-[#B7D7F0]">
               <span className={`w-2 h-2 rounded-full ${loading ? 'bg-amber-500 animate-spin' : 'bg-emerald-500 animate-pulse'}`}></span>
-              {loading ? 'Refreshing...' : 'Live Hospital Data'}
+              {loading ? 'Refreshing...' : 'Live Store Data'}
             </span>
           </div>
         </div>
@@ -1218,7 +1218,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                 </div>
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Hospital Expenses</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Total Store Expenses</span>
                 <div className="text-lg font-black text-rose-600">
                   Rs. {(selectedMonth.totalExpenses || 0).toLocaleString()}
                 </div>
@@ -1420,12 +1420,12 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                   <div>
                     <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
                       <Receipt className="w-3.5 h-3.5 text-rose-600" />
-                      <span>Hospital Expenses & Staff Salaries</span>
+                      <span>Store Expenses & Staff Salaries</span>
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div className="bg-rose-50/60 p-3.5 rounded-xl border border-rose-100">
-                        <div className="text-[11px] font-bold text-rose-800 uppercase">Hospital Bills & Everyday Expenses</div>
+                        <div className="text-[11px] font-bold text-rose-800 uppercase">Store Bills & Everyday Expenses</div>
                         <div className="text-lg font-black text-rose-700 mt-1">
                           Rs. {(selectedMonth.hospitalExpenses || 0).toLocaleString()}
                         </div>
@@ -1581,7 +1581,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             {/* Modal Footer */}
             <div className="bg-slate-50 p-4 border-t border-slate-200 flex items-center justify-between shrink-0">
               <span className="text-xs text-slate-500">
-                Hospital Annual Financial Analytics • {selectedMonth.monthName} {selectedMonth.year}
+                Super Mart Annual Financial Analytics • {selectedMonth.monthName} {selectedMonth.year}
               </span>
               <button
                 onClick={closeMonthModal}

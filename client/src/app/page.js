@@ -3,14 +3,14 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
-import { useHospital } from '../context/HospitalContext';
+import { useStore } from '../context/StoreContext';
 import Link from 'next/link';
 import { ShoppingCart, Store, ArrowRight, ShieldCheck, Zap, BarChart3, Users, Package } from 'lucide-react';
 
 export default function RootHomePage() {
   const router = useRouter();
   const { user, loading } = useAuth();
-  const { storeName, tagline } = useHospital();
+  const { storeName, tagline } = useStore();
 
   useEffect(() => {
     if (!loading) {

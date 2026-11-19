@@ -1,14 +1,19 @@
 /**
- * Official Hospital Expense Voucher & Petty Cash Slip Generator
- * Generates an 80mm thermal receipt or A5 print voucher for hospital expense records.
+ * Official Super Mart Expense Voucher & Petty Cash Slip Generator
+ * Generates an 80mm thermal receipt or A5 print voucher for store expense records.
  */
 
 export const printExpenseVoucher = ({
-  hospitalName = 'SHIFA HOSPITAL SAMARBAGH',
-  hospitalAddress = 'Main Highway, Timergara • Ph: +92 300 0000000',
+  storeName = 'METRO SUPER MART & GROCERS',
+  hospitalName = '',
+  storeAddress = 'Main Commercial Boulevard, Phase 4, City Center',
+  hospitalAddress = '',
   expense
 }) => {
   if (!expense) return;
+
+  const displayName = storeName || hospitalName || 'METRO SUPER MART';
+  const displayAddress = storeAddress || hospitalAddress || 'Main Commercial Boulevard';
 
   const win = window.open('', '_blank');
   if (!win) {
@@ -62,9 +67,9 @@ export const printExpenseVoucher = ({
 </head>
 <body>
   <div class="header text-center">
-    <h1 class="title">${hospitalName}</h1>
-    <p class="subtitle">${hospitalAddress}</p>
-    <div class="badge">OFFICIAL EXPENSE / CASH VOUCHER</div>
+    <h1 class="title">${displayName}</h1>
+    <p class="subtitle">${displayAddress}</p>
+    <div class="badge">OFFICIAL STORE EXPENSE VOUCHER</div>
     <div style="font-size: 9.5px; margin-top: 3px;">Voucher No: <strong>${expense.expenseNo}</strong></div>
     <div style="font-size: 9px; color: #444;">Date: ${expenseDate}</div>
   </div>
@@ -117,7 +122,7 @@ export const printExpenseVoucher = ({
   </div>
 
   <div style="text-align: center; font-size: 8px; color: #666; margin-top: 15px;">
-    System-generated hospital expense record • CarePulse HMS
+    System-generated store expense record • Super Mart POS
   </div>
 
   <script>

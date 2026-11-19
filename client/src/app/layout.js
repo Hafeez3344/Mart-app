@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import { CurrencyProvider } from '../context/CurrencyContext';
-import { HospitalProvider } from '../context/HospitalContext';
+import { StoreProvider } from '../context/StoreContext';
 import { SidebarProvider } from '../context/SidebarContext';
 import ReduxProvider from '../store/ReduxProvider';
 
@@ -63,11 +63,11 @@ export default function RootLayout({ children }) {
         <ReduxProvider>
           <AuthProvider>
             <CurrencyProvider>
-              <HospitalProvider>
+              <StoreProvider>
                 <SidebarProvider>
                   {children}
                 </SidebarProvider>
-              </HospitalProvider>
+              </StoreProvider>
             </CurrencyProvider>
           </AuthProvider>
         </ReduxProvider>

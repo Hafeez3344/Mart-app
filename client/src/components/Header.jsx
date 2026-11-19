@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
-import { useHospital } from '../context/HospitalContext';
+import { useStore } from '../context/StoreContext';
 import { useSidebar } from '../context/SidebarContext';
 import {
   ShoppingCart,
@@ -23,7 +23,7 @@ import {
 
 export default function Header() {
   const { user, logout } = useAuth();
-  const { storeName, tagline } = useHospital();
+  const { storeName, tagline } = useStore();
   const { isOpen, toggleSidebar } = useSidebar();
   const [lanUrl, setLanUrl] = useState('');
   const [copied, setCopied] = useState(false);

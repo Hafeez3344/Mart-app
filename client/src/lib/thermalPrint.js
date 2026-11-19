@@ -1,9 +1,7 @@
 import api from './api';
-import { printMasterReceiptPdf, printMasterReceiptNetworkThermal } from './masterReceiptPdfPrint';
 import { printRawBase64ViaWebUsb, printViaWorkstationAgent, isWebUsbPaired, isWorkstationAgentOnline } from './webUsbPrint';
 
-// Export Master Thermal Receipt Generator (Direct Network Thermal with Browser Fallback)
-export const printThermalPatientMasterReceipt = printMasterReceiptNetworkThermal;
+// Export Master Thermal Receipt Generator for Mart POS
 export const printThermalMartReceipt = (...args) => printThermalPharmacyReceipt(...args);
 
 /**
