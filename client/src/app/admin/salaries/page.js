@@ -1,7 +1,7 @@
 'use client';
 
-import FrontdeskSalariesPage from '../../frontdesk/salaries/page';
+import SalariesPage from '../../salaries/page';
 
 export default function AdminSalariesPage() {
-  return <FrontdeskSalariesPage />;
+  return <SalariesPage />;
 }

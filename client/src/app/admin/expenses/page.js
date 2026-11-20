@@ -1,7 +1,7 @@
 'use client';
 
-import FrontdeskExpensesPage from '../../frontdesk/expenses/page';
+import ExpensesPage from '../../expenses/page';
 
 export default function AdminExpensesPage() {
-  return <FrontdeskExpensesPage />;
+  return <ExpensesPage />;
 }

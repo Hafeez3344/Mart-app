@@ -126,7 +126,7 @@ export default function AdminBackupPage() {
       return;
     }
 
-    if (!confirm('WARNING: Restoring from a backup will merge and update your live hospital database. Do you wish to continue?')) {
+    if (!confirm('WARNING: Restoring from a backup will merge and update your live mart database. Do you wish to continue?')) {
       return;
     }
 
@@ -170,10 +170,10 @@ export default function AdminBackupPage() {
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight text-slate-800">
-              Hospital Database Backup & Cloud Security
+              Super Mart Database Backup & Cloud Security
             </h1>
             <p className="text-sm font-medium text-slate-500">
-              Preserve all patient histories, financial ledgers, pharmacy sales & clinical records with 1-click snapshots.
+              Preserve all inventory, sales records, customer ledgers & financials with 1-click snapshots.
             </p>
           </div>
         </div>
@@ -210,16 +210,16 @@ export default function AdminBackupPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-blue-500" /> Patients
+            <Users className="w-3.5 h-3.5 text-blue-500" /> Customers
           </div>
-          <div className="text-2xl font-black text-slate-800">{data?.metrics?.patients ?? '—'}</div>
+          <div className="text-2xl font-black text-slate-800">{data?.metrics?.customers ?? data?.metrics?.patients ?? '—'}</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-indigo-500" /> Appointments
+            <Calendar className="w-3.5 h-3.5 text-indigo-500" /> Sales / Orders
           </div>
-          <div className="text-2xl font-black text-slate-800">{data?.metrics?.appointments ?? '—'}</div>
+          <div className="text-2xl font-black text-slate-800">{data?.metrics?.sales ?? data?.metrics?.appointments ?? '—'}</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -231,16 +231,16 @@ export default function AdminBackupPage() {
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <FileText className="w-3.5 h-3.5 text-amber-500" /> Pharmacy Sales
+            <FileText className="w-3.5 h-3.5 text-amber-500" /> POS Sales
           </div>
           <div className="text-2xl font-black text-slate-800">{data?.metrics?.pharmacySales ?? '—'}</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <Database className="w-3.5 h-3.5 text-purple-500" /> Lab Orders
+            <Database className="w-3.5 h-3.5 text-purple-500" /> Products
           </div>
-          <div className="text-2xl font-black text-slate-800">{data?.metrics?.labOrders ?? '—'}</div>
+          <div className="text-2xl font-black text-slate-800">{data?.metrics?.products ?? data?.metrics?.labOrders ?? '—'}</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -270,7 +270,7 @@ export default function AdminBackupPage() {
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-slate-700">Backup Directory:</span>
                 <span className="font-mono text-slate-500 truncate max-w-[220px]" title={data?.backupDir}>
-                  {data?.backupDir || 'C:/Users/.../Hospital_Backups'}
+                  {data?.backupDir || 'C:/Users/.../Mart_Backups'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -279,7 +279,7 @@ export default function AdminBackupPage() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-slate-700">Scope:</span>
-                <span className="text-emerald-600 font-bold">100% Patient & Financial Tables</span>
+                <span className="text-emerald-600 font-bold">100% Mart Inventory & Financial Tables</span>
               </div>
             </div>
           </div>
@@ -303,7 +303,7 @@ export default function AdminBackupPage() {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-800">Online Cloud Synchronization</h2>
-                <p className="text-xs font-medium text-slate-500">Mirror hospital database securely to cloud storage for disaster recovery.</p>
+                <p className="text-xs font-medium text-slate-500">Mirror mart database securely to cloud storage for disaster recovery.</p>
               </div>
             </div>
 
@@ -334,7 +334,7 @@ export default function AdminBackupPage() {
             className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition active:scale-[0.98] disabled:opacity-60"
           >
             {syncingCloud ? <RefreshCw className="w-5 h-5 animate-spin" /> : <UploadCloud className="w-5 h-5" />}
-            <span>{syncingCloud ? 'Synchronizing with Cloud...' : 'Sync Live Hospital Data to Cloud'}</span>
+            <span>{syncingCloud ? 'Synchronizing with Cloud...' : 'Sync Live Mart Data to Cloud'}</span>
           </button>
         </div>
       </div>

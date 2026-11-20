@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-import HmsStockInventoryView from '../../../components/HmsStockInventoryView';
+import InventoryRedirect from '../../inventory/page';
 
-export default function AdminHmsInventoryPage() {
-  return <HmsStockInventoryView portal="admin" />;
+export default function AdminInventoryPage() {
+  return <InventoryRedirect />;
 }

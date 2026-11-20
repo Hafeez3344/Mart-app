@@ -1,7 +1,7 @@
 'use client';
 
-import FrontDeskReportsPage from '../../frontdesk/reports/page';
+import ReportsPage from '../../reports/page';
 
 export default function AdminReportsPage() {
-  return <FrontDeskReportsPage />;
+  return <ReportsPage />;
 }
