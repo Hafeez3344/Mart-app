@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
-import { useHospital } from '../../context/HospitalContext';
+import { useHospital } from '../../context/StoreContext';
 import {
   Settings,
   Store,

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../lib/api';
 import { useCurrency } from '../../../context/CurrencyContext';
-import { useHospital } from '../../../context/HospitalContext';
+import { useHospital } from '../../../context/StoreContext';
 import {
   Receipt,
   DollarSign,

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import api from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
 import { useCurrency } from '../../context/CurrencyContext';
-import { useHospital } from '../../context/HospitalContext';
+import { useHospital } from '../../context/StoreContext';
 import { printStaffSalarySlip } from '../../lib/salarySlipPrint';
 import ConfirmModal from '../../components/ConfirmModal';
 import {

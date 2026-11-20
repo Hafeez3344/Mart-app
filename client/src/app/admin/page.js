@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar';
 import Link from 'next/link';
 import api from '../../lib/api';
 import { printThermalMartReceipt } from '../../lib/thermalPrint';
-import { useHospital } from '../../context/HospitalContext';
+import { useHospital } from '../../context/StoreContext';
 import {
   LayoutDashboard,
   ShoppingCart,

@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
 import { printThermalMartReceipt } from '../../lib/thermalPrint';
 import { useCurrency } from '../../context/CurrencyContext';
-import { useHospital } from '../../context/HospitalContext';
+import { useHospital } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import {
   ShoppingCart,

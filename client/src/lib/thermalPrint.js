@@ -3,6 +3,7 @@ import { printRawBase64ViaWebUsb, printViaWorkstationAgent, isWebUsbPaired, isWo
 
 // Export Master Thermal Receipt Generator for Mart POS
 export const printThermalMartReceipt = (...args) => printThermalPharmacyReceipt(...args);
+export const printThermalPatientMasterReceipt = (...args) => printThermalMartReceipt(...args);
 
 /**
  * Resolves configured departmental workstation thermal printer from localStorage
@@ -2180,6 +2181,7 @@ export async function printThermalRefundReceipt(refundData, options = {}) {
 }
 
 export default {
+  printThermalMartReceipt,
   printThermalPatientMasterReceipt,
   printThermalTokenSlip,
   printThermalPharmacyReceipt,

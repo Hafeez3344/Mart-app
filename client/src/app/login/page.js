@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
-import { useHospital } from '../../context/HospitalContext';
+import { useHospital } from '../../context/StoreContext';
 import {
   ShoppingCart,
   Lock,
