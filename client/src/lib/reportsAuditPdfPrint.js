@@ -5,9 +5,9 @@
 
 export const printReportsAuditPdf = (reportData = {}) => {
   const {
-    hospitalName = 'SHIFA HOSPITAL SAMARBAGH',
-    hospitalAddress = 'Main Highway, Samarbagh, District Lower Dir, KPK',
-    hospitalPhone = '+92 945 881234 / 0300-1234567',
+    hospitalName = reportData.storeName || 'METRO SUPER MART & GROCERS',
+    hospitalAddress = reportData.locationAddress || reportData.address || 'Main Commercial Boulevard, Phase 4, City Center',
+    hospitalPhone = reportData.phone || '+92 300 1234567',
     period = 'today',
     range = {},
     summary = {},
@@ -16,7 +16,7 @@ export const printReportsAuditPdf = (reportData = {}) => {
     searchQuery = '',
     statusFilter = 'ALL',
     paymentMethodFilter = 'ALL',
-    generatedBy = 'Front Desk Cashier / Auditor'
+    generatedBy = 'Mart Cashier / Store Manager'
   } = reportData;
 
   const printWin = window.open('', '_blank');
@@ -351,7 +351,7 @@ export const printReportsAuditPdf = (reportData = {}) => {
       <!-- Header Letterhead -->
       <div class="hdr">
         <div class="hdr-title">${hospitalName}</div>
-        <div class="hdr-sub">Hospital Financial Audit & Operations Report</div>
+        <div class="hdr-sub">Super Mart Financial Audit & Operations Report</div>
         <div class="hdr-contact">${hospitalAddress} | Phone: ${hospitalPhone}</div>
       </div>
 
@@ -387,7 +387,7 @@ export const printReportsAuditPdf = (reportData = {}) => {
           <td class="s-val">Rs. ${totalIncome.toLocaleString()}</td>
         </tr>
         <tr>
-          <td class="s-lbl">Hospital Operating Expenses</td>
+          <td class="s-lbl">Store Operating Expenses</td>
           <td class="s-val font-bold">(${totalExpenses.toLocaleString()})</td>
           <td class="s-lbl">Staff Salaries & Payroll</td>
           <td class="s-val font-bold">(${totalSalaries.toLocaleString()})</td>
@@ -395,11 +395,11 @@ export const printReportsAuditPdf = (reportData = {}) => {
         <tr>
           <td class="s-lbl">Refunds & Returns Issued</td>
           <td class="s-val">(${refundsTotal.toLocaleString()})</td>
-          <td class="s-lbl">Outstanding Patient Dues</td>
+          <td class="s-lbl">Outstanding Customer Dues</td>
           <td class="s-val">Rs. ${pendingDues.toLocaleString()}</td>
         </tr>
         <tr class="net-row">
-          <td colspan="2">NET HOSPITAL CASH IN HAND (SHIFT LIQUIDITY)</td>
+          <td colspan="2">NET STORE CASH IN HAND (SHIFT LIQUIDITY)</td>
           <td colspan="2" class="s-val" style="font-size:12px;">Rs. ${netCash.toLocaleString()}</td>
         </tr>
       </table>

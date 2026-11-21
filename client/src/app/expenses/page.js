@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
-import { useHospital } from '../../context/StoreContext';
+import { useStore } from '../../context/StoreContext';
 import {
   DollarSign,
   Plus,
@@ -34,7 +34,7 @@ const EXPENSE_CATEGORIES = [
 ];
 
 export default function ExpensesPage() {
-  const { currencySymbol } = useHospital();
+  const { currencySymbol } = useStore();
 
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,16 +140,16 @@ export default function ExpensesPage() {
           </div>
 
           {/* Total Expense Banner */}
-          <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
             <div className="space-y-1">
-              <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                 Total Recorded Operational Expenses
               </div>
-              <div className="text-2xl font-black font-mono text-rose-400">
+              <div className="text-2xl font-black font-mono text-rose-600">
                 {currencySymbol} {totalExpenseSum}
               </div>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
               <TrendingDown className="w-6 h-6" />
             </div>
           </div>

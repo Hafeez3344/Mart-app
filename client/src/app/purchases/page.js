@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
-import { useHospital } from '../../context/StoreContext';
+import { useStore } from '../../context/StoreContext';
 import {
   ClipboardList,
   Plus,
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export default function PurchasesPage() {
-  const { currencySymbol } = useHospital();
+  const { currencySymbol } = useStore();
 
   const [suppliers, setSuppliers] = useState([]);
   const [products, setProducts] = useState([]);

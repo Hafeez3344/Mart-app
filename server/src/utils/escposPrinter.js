@@ -531,10 +531,10 @@ function buildMasterReceiptEscPos({
  * Tabular format with solid CP437 box borders matching the on-screen receipt.
  */
 function buildPharmacyReceiptEscPos({
-  hospitalName = 'CarePulse Hospital',
+  hospitalName = 'Metro Super Mart & Grocers',
   hospitalAddress = '',
   hospitalPhone = '',
-  invoiceNo = 'PHARM-INV',
+  invoiceNo = 'MART-INV',
   customerName = 'Walk-In Customer',
   mrn = '',
   customerPhone = '',
@@ -549,7 +549,7 @@ function buildPharmacyReceiptEscPos({
   paidAmount = 0,
   balanceDue = 0,
   paymentMethod = 'CASH',
-  paidAtCounter = 'PHARMACY'
+  paidAtCounter = 'POS'
 }) {
   let out = '';
 
@@ -572,7 +572,7 @@ function buildPharmacyReceiptEscPos({
   }
   out += boxBorder(44, 'middle');
   out += `${ESC}E\x01`; // Bold ON
-  out += boxText('PHARMACY COUNTER INVOICE', 44, 'center');
+  out += boxText('SUPER MART POS INVOICE', 44, 'center');
   out += `${ESC}E\x00`; // Bold OFF
   out += boxBorder(44, 'middle');
 
@@ -581,20 +581,20 @@ function buildPharmacyReceiptEscPos({
   const formattedDate = dateStr || now.toLocaleString('en-GB');
 
   out += boxTwoCol(`Inv: ${invoiceNo}`, `Date: ${formattedDate.substring(0, 14)}`, 23, 20);
-  out += boxTwoCol(`Cust: ${(customerName || 'Walk-In').substring(0, 16)}`, `MRN: ${mrn || customerPhone || 'N/A'}`, 23, 20);
-  out += boxTwoCol(`Status: ${status.toUpperCase()}`, `Counter: ${paidAtCounter || 'PHARM'}`, 23, 20);
+  out += boxTwoCol(`Cust: ${(customerName || 'Walk-In').substring(0, 16)}`, `Phone: ${customerPhone || mrn || 'N/A'}`, 23, 20);
+  out += boxTwoCol(`Status: ${status.toUpperCase()}`, `Counter: ${paidAtCounter || 'POS'}`, 23, 20);
 
   // 3. Table Column Headers with solid border
   out += boxDivider3Col(26, 5, 11, 'middle');
   out += `${ESC}E\x01`; // Bold ON
-  out += boxThreeCol('ITEM / MEDICINE', 'QTY', 'TOTAL', 26, 5, 11);
+  out += boxThreeCol('ITEM / PRODUCT', 'QTY', 'TOTAL', 26, 5, 11);
   out += `${ESC}E\x00`; // Bold OFF
   out += boxDivider3Col(26, 5, 11, 'middle');
 
   // 4. Items List
   if (Array.isArray(items) && items.length > 0) {
     items.forEach((item) => {
-      const name = item.medicineName || item.name || item.title || 'Medicine';
+      const name = item.productName || item.name || item.title || item.itemName || item.medicineName || 'Product';
       const retQty = item.returnedQuantity || 0;
       const activeQty = item.activeQuantity !== undefined ? item.activeQuantity : Math.max(0, (item.quantity || 1) - retQty);
       const qtyStr = String(retQty > 0 ? activeQty : (item.quantity || 1));
@@ -613,7 +613,7 @@ function buildPharmacyReceiptEscPos({
       }
     });
   } else {
-    out += boxThreeCol('Pharmacy Sale', '1', `Rs.${Number(netTotal || subtotal).toFixed(0)}`, 26, 5, 11);
+    out += boxThreeCol('Mart Sale', '1', `Rs.${Number(netTotal || subtotal).toFixed(0)}`, 26, 5, 11);
   }
 
   out += boxBorder(44, 'middle');

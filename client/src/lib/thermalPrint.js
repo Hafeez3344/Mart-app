@@ -384,27 +384,27 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
     const sale = options.sale || (Array.isArray(options.pharmacySales) ? options.pharmacySales[0] : options);
     if (!sale) return { success: false, error: 'No sale data provided' };
 
-    let hospName = options.hospitalName || '';
-    let hospAddress = options.hospitalAddress || '';
-    let hospPhone = options.hospitalPhone || '';
+    let hospName = options.storeName || options.hospitalName || '';
+    let hospAddress = options.address || options.locationAddress || options.hospitalAddress || '';
+    let hospPhone = options.phone || options.hospitalPhone || '';
 
     if (!hospName || !hospAddress || !hospPhone) {
       try {
         const setRes = await api.get('/settings');
         if (setRes.data?.success && setRes.data.settings) {
           const s = setRes.data.settings;
-          hospName = hospName || s.hospitalName;
+          hospName = hospName || s.storeName || s.hospitalName;
           hospAddress = hospAddress || s.locationAddress || s.address;
           hospPhone = hospPhone || s.phone || s.contactPhone;
         }
       } catch (e) {
-        console.warn('Could not load hospital settings:', e);
+        console.warn('Could not load store settings:', e);
       }
     }
 
-    hospName = hospName || 'CarePulse Hospital';
-    hospAddress = hospAddress || 'Plot 14, Sector H-8/4, Islamabad, Pakistan';
-    hospPhone = hospPhone || '+92 51 111 222 333';
+    hospName = hospName || 'Metro Super Mart & Grocers';
+    hospAddress = hospAddress || 'Main Commercial Boulevard, Phase 4, City Center';
+    hospPhone = hospPhone || '+92 300 1234567';
 
     const subtotal = sale.subtotal !== undefined ? sale.subtotal : (sale.netTotal || 0);
     const netTotal = sale.netTotal !== undefined ? sale.netTotal : subtotal;
@@ -413,7 +413,12 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
     const adjustedNet = sale.adjustedNetTotal !== undefined ? sale.adjustedNetTotal : Math.max(0, netTotal - totalRefund);
     const unpaid = sale.unpaidBalance !== undefined ? sale.unpaidBalance : Math.max(0, adjustedNet - paid);
 
-    const rawItems = sale.items || (sale.medicineName ? [{ medicineName: sale.medicineName, quantity: sale.quantity || 1, unitPrice: sale.unitPrice || 0, totalPrice: sale.totalPrice || (sale.unitPrice || 0) * (sale.quantity || 1) }] : []);
+    const rawItems = sale.items || (sale.productName || sale.name || sale.medicineName ? [{
+      productName: sale.productName || sale.name || sale.medicineName,
+      quantity: sale.quantity || 1,
+      unitPrice: sale.unitPrice || 0,
+      totalPrice: sale.totalPrice || (sale.unitPrice || 0) * (sale.quantity || 1)
+    }] : []);
 
     // 1. ATTEMPT DIRECT HARDWARE SILENT THERMAL PRINT (LOCAL USB, WEBUSB, OR TCP/IP)
     if (!forceBrowserPrint) {
@@ -449,6 +454,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
 
     // 2. FALLBACK TO BROWSER PRINT PREVIEW (with auto-close)
     const itemsRows = rawItems.map(i => {
+      const itemName = i.productName || i.name || i.title || i.itemName || i.medicineName || 'Product Item';
       const retQty = i.returnedQuantity || 0;
       const activeQty = i.activeQuantity !== undefined ? i.activeQuantity : Math.max(0, (i.quantity || 1) - retQty);
       const activeTot = i.activeTotalPrice !== undefined ? i.activeTotalPrice : (activeQty * (i.unitPrice || 0));
@@ -456,7 +462,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
       return `
       <tr>
         <td style="padding: 3px 0; border-bottom: 1px dashed #000; text-align: left; word-break: break-word;">
-          ${i.medicineName || 'Medicine'}
+          ${itemName}
           ${retQty > 0 ? `<br/><span style="color:#b91c1c; font-size:8.5px; font-weight:bold;">(Returned: ${retQty} qty)</span>` : ''}
         </td>
         <td style="padding: 3px 0; text-align: center; border-bottom: 1px dashed #000; font-weight: bold;">
@@ -474,7 +480,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Receipt #${sale.invoiceNo || 'PHARM-RECEIPT'}</title>
+        <title>Receipt #${sale.invoiceNo || 'MART-RECEIPT'}</title>
         <style>
           @page { size: 80mm auto; margin: 0; }
           * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -563,7 +569,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
           <div class="title">${hospName}</div>
           <div class="sub-info">${hospAddress}</div>
           <div class="sub-info">Ph: ${hospPhone}</div>
-          <div class="inv-tag">PHARMACY COUNTER INVOICE</div>
+          <div class="inv-tag">SUPER MART POS SALES INVOICE</div>
         </div>
 
         <div class="info-block">
@@ -612,7 +618,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
             </div>
           ` : ''}
           <div class="row">
-            <span>Paid (${sale.paymentMethod || 'CASH'}${sale.paidAtCounter === 'FRONTDESK' ? ' • Front Desk Counter' : (sale.paidAtCounter === 'PHARMACY' || paid > 0 ? ' • Pharmacy Counter' : ' • Pending Front Desk')}):</span>
+            <span>Paid (${sale.paymentMethod || 'CASH'} • POS Counter):</span>
             <span>Rs. ${Number(paid).toFixed(2)}</span>
           </div>
           ${unpaid > 0 ? `
@@ -2026,9 +2032,9 @@ export function printRefundReceiptViaHiddenIframe(slip, options = {}) {
     ${hospAddr ? `<div style="font-size: 9.5px;">${hospAddr}</div>` : ''}
     ${hospPhone ? `<div style="font-size: 9.5px;">Ph: ${hospPhone}</div>` : ''}
     <div style="font-size: 11.5px; font-weight: 900; margin-top: 4px; text-transform: uppercase;">
-      *** OFFICIAL PATIENT REFUND VOUCHER ***
+      *** OFFICIAL CUSTOMER REFUND VOUCHER ***
     </div>
-    <div style="font-size: 9.5px; font-weight: bold;">FRONT DESK CASH DISBURSEMENT</div>
+    <div style="font-size: 9.5px; font-weight: bold;">POS COUNTER CASH DISBURSEMENT</div>
   </div>
 
   <div class="row">
@@ -2040,12 +2046,12 @@ export function printRefundReceiptViaHiddenIframe(slip, options = {}) {
     <span>${new Date(slip.date || Date.now()).toLocaleDateString('en-GB')} ${new Date(slip.date || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
   </div>
   <div class="row">
-    <span>Patient Name:</span>
-    <span class="bold">${slip.patientName}</span>
+    <span>Customer Name:</span>
+    <span class="bold">${slip.patientName || slip.customerName || 'Customer'}</span>
   </div>
   <div class="row">
-    <span>MRN:</span>
-    <span class="bold">${slip.mrn || 'WALK-IN'}</span>
+    <span>Customer ID:</span>
+    <span class="bold">${slip.mrn || slip.customerId || 'WALK-IN'}</span>
   </div>
   ${slip.phone && slip.phone !== 'N/A' ? `<div class="row"><span>Phone:</span><span>${slip.phone}</span></div>` : ''}
 

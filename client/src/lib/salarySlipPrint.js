@@ -5,8 +5,8 @@
  */
 
 export const printStaffSalarySlip = ({
-  hospitalName = 'SHIFA HOSPITAL SAMARBAGH',
-  hospitalAddress = 'Main Highway, Timergara • Ph: +92 300 0000000',
+  hospitalName = 'SUPER MART POINT OF SALE',
+  hospitalAddress = 'Main Commercial Boulevard • Ph: +92 300 1234567',
   currencySymbol = 'Rs. ',
   staff,
   salaryRecord
@@ -107,7 +107,7 @@ export const printStaffSalarySlip = ({
     </div>
     <div>
       <div class="emp-label">Designation</div>
-      <div class="emp-val">${staff.designation || 'Hospital Staff'}</div>
+      <div class="emp-val">${staff.designation || 'Mart Staff'}</div>
     </div>
     <div>
       <div class="emp-label">Department</div>
@@ -243,7 +243,7 @@ export const printStaffSalarySlip = ({
   </div>
 
   <div class="footer">
-    This is an official computer-generated salary pay slip from ${hospitalName} HMS • Document Verified
+    This is an official computer-generated salary pay slip from ${hospitalName} • Document Verified
   </div>
 
   <script>

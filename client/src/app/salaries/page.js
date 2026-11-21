@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
-import { useHospital } from '../../context/StoreContext';
+import { useStore } from '../../context/StoreContext';
 import {
   CircleDollarSign,
   Users,
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export default function SalariesPage() {
-  const { currencySymbol } = useHospital();
+  const { currencySymbol } = useStore();
 
   const [staffList, setStaffList] = useState([]);
   const [salaryRecords, setSalaryRecords] = useState([]);
@@ -143,7 +143,7 @@ export default function SalariesPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search staff name, employee ID, designation..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:bg-white"
             />
           </div>
 
@@ -242,7 +242,7 @@ export default function SalariesPage() {
                   <select
                     value={payModal.month}
                     onChange={(e) => setPayModal({ ...payModal, month: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800"
                   >
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => (
                       <option key={m} value={m}>
@@ -258,7 +258,7 @@ export default function SalariesPage() {
                     type="number"
                     value={payModal.year}
                     onChange={(e) => setPayModal({ ...payModal, year: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-mono"
                   />
                 </div>
               </div>
@@ -273,7 +273,7 @@ export default function SalariesPage() {
                   required
                   value={payModal.baseSalary}
                   onChange={(e) => setPayModal({ ...payModal, baseSalary: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-white"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800"
                 />
               </div>
 
@@ -287,7 +287,7 @@ export default function SalariesPage() {
                     step="any"
                     value={payModal.bonus}
                     onChange={(e) => setPayModal({ ...payModal, bonus: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-emerald-400"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-emerald-700"
                   />
                 </div>
 
@@ -300,14 +300,14 @@ export default function SalariesPage() {
                     step="any"
                     value={payModal.deductions}
                     onChange={(e) => setPayModal({ ...payModal, deductions: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-rose-400"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-rose-600"
                   />
                 </div>
               </div>
 
               <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between font-bold">
-                <span className="text-slate-400">Net Disbursed:</span>
-                <span className="font-mono text-emerald-400 text-sm">
+                <span className="text-slate-500">Net Disbursed:</span>
+                <span className="font-mono text-emerald-700 text-sm">
                   {currencySymbol}{' '}
                   {(
                     (parseFloat(payModal.baseSalary) || 0) +

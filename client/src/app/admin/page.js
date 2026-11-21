@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar';
 import Link from 'next/link';
 import api from '../../lib/api';
 import { printThermalMartReceipt } from '../../lib/thermalPrint';
-import { useHospital } from '../../context/StoreContext';
+import { useStore } from '../../context/StoreContext';
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
-  const { storeName, address, phone, currencySymbol } = useHospital();
+  const { storeName, address, phone, currencySymbol } = useStore();
 
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);

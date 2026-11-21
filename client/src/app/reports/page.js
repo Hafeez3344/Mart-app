@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 import api from '../../lib/api';
-import { useHospital } from '../../context/StoreContext';
+import { useStore } from '../../context/StoreContext';
 import {
   BarChart3,
   TrendingUp,
@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export default function ReportsPage() {
-  const { currencySymbol } = useHospital();
+  const { currencySymbol } = useStore();
 
   const [financial, setFinancial] = useState(null);
   const [topProducts, setTopProducts] = useState([]);
@@ -149,7 +149,7 @@ export default function ReportsPage() {
                   {topProducts.map((p, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between"
+                      className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold flex items-center justify-center font-mono border border-emerald-200">
