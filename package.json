@@ -7,13 +7,23 @@
     "start": "node_modules\\electron\\dist\\electron.exe .",
     "electron": "node_modules\\electron\\dist\\electron.exe .",
     "electron:dev": "node_modules\\electron\\dist\\electron.exe .",
+    "build:electron": "electron-packager . SuperMartPOS --platform=win32 --arch=x64 --out=dist --overwrite --ignore=\"client/node_modules\" --ignore=\"server/node_modules\" --ignore=\"client/\\.next\" --ignore=\"\\.git\"",
     "server": "cd server && node src/server.js",
     "client": "cd client && node node_modules/next/dist/bin/next dev"
   },
-  "keywords": ["pos", "supermarket", "retail", "electron", "nextjs", "express", "postgresql"],
+  "keywords": [
+    "pos",
+    "supermarket",
+    "retail",
+    "electron",
+    "nextjs",
+    "express",
+    "postgresql"
+  ],
   "author": "Super Mart POS",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^45.3.3"
+    "electron": "^45.3.3",
+    "electron-packager": "^17.1.2"
   }
 }
