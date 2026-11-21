@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -131,7 +131,7 @@ export default function MartSettingsPage() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
       <Sidebar />
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
@@ -140,18 +140,18 @@ export default function MartSettingsPage() {
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <Settings className="w-6 h-6 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <Settings className="w-6 h-6 text-emerald-600" />
                 <span>Mart Store & Hardware Settings</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Configure mart identity, currency, receipt branding, and ESC/POS thermal printers
               </p>
             </div>
 
             <button
               onClick={fetchSettings}
-              className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800"
+              className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-700 border border-slate-200 shadow-xs"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -173,14 +173,14 @@ export default function MartSettingsPage() {
           <form onSubmit={handleSave} className="space-y-6">
             {/* Store Identity */}
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Store className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Store className="w-4 h-4 text-emerald-600" />
                 <span>Store Identity & Business Profile</span>
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Mart / Supermarket Name *
                   </label>
                   <input
@@ -188,72 +188,72 @@ export default function MartSettingsPage() {
                     required
                     value={form.storeName}
                     onChange={(e) => setForm({ ...form, storeName: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Store Slogan / Tagline
                   </label>
                   <input
                     type="text"
                     value={form.tagline}
                     onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Contact Phone Number
                   </label>
                   <input
                     type="text"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Business Email
                   </label>
                   <input
                     type="email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Physical Store Address
                   </label>
                   <input
                     type="text"
                     value={form.address}
                     onChange={(e) => setForm({ ...form, address: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     NTN / Tax Registration Number
                   </label>
                   <input
                     type="text"
                     value={form.taxNumber}
                     onChange={(e) => setForm({ ...form, taxNumber: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Currency Symbol
                   </label>
                   <input
@@ -269,20 +269,20 @@ export default function MartSettingsPage() {
 
             {/* Thermal Printer & Receipt Settings */}
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Printer className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Printer className="w-4 h-4 text-emerald-600" />
                 <span>Thermal Printer & Receipt Customization</span>
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Receipt Paper Width
                   </label>
                   <select
                     value={form.paperWidth}
                     onChange={(e) => setForm({ ...form, paperWidth: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   >
                     <option value={80}>80mm (Standard POS Thermal)</option>
                     <option value={58}>58mm (Compact Mobile POS Thermal)</option>
@@ -290,26 +290,26 @@ export default function MartSettingsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Receipt Header Greeting
                   </label>
                   <input
                     type="text"
                     value={form.receiptHeader}
                     onChange={(e) => setForm({ ...form, receiptHeader: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Receipt Footer Exchange Policy
                   </label>
                   <input
                     type="text"
                     value={form.receiptFooter}
                     onChange={(e) => setForm({ ...form, receiptFooter: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
@@ -346,7 +346,7 @@ export default function MartSettingsPage() {
               <div className="flex items-center gap-3 pb-3 border-b border-slate-800">
                 <Database className="w-5 h-5 text-indigo-400" />
                 <div>
-                  <h3 className="text-sm font-bold text-white">Database Backup & Hardware Testing</h3>
+                  <h3 className="text-sm font-bold text-slate-900">Database Backup & Hardware Testing</h3>
                   <p className="text-xs text-slate-400">PostgreSQL automated snapshot and POS hardware pulse</p>
                 </div>
               </div>
@@ -404,3 +404,4 @@ export default function MartSettingsPage() {
     </div>
   );
 }
+

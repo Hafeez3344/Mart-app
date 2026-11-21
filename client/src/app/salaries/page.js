@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -109,7 +109,7 @@ export default function SalariesPage() {
   });
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
       <Sidebar />
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
@@ -118,18 +118,18 @@ export default function SalariesPage() {
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <CircleDollarSign className="w-6 h-6 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <CircleDollarSign className="w-6 h-6 text-emerald-600" />
                 <span>Mart Staff Payroll & Salaries</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Manage cashier salaries, shifts, advance deductions, and payment disbursements
               </p>
             </div>
 
             <button
               onClick={fetchData}
-              className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800"
+              className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-700 border border-slate-200 shadow-xs"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -137,7 +137,7 @@ export default function SalariesPage() {
 
           {/* Search */}
           <div className="relative max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
@@ -148,10 +148,10 @@ export default function SalariesPage() {
           </div>
 
           {/* Staff Table */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-bold border-b border-slate-800">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                   <tr>
                     <th className="p-3">Emp ID</th>
                     <th className="p-3">Staff Name</th>
@@ -162,23 +162,23 @@ export default function SalariesPage() {
                     <th className="p-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-medium">
+                <tbody className="divide-y divide-slate-100 font-medium">
                   {loading ? (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-slate-500">
+                      <td colSpan={7} className="p-8 text-center text-slate-400">
                         Loading staff list...
                       </td>
                     </tr>
                   ) : filteredStaff.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-slate-500">
+                      <td colSpan={7} className="p-8 text-center text-slate-400">
                         No staff members found.
                       </td>
                     </tr>
                   ) : (
                     filteredStaff.map(s => (
-                      <tr key={s.id} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="p-3 font-mono text-emerald-400 font-bold">{s.employeeId}</td>
+                      <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3 font-mono text-emerald-700 font-bold">{s.employeeId}</td>
                         <td className="p-3 font-bold text-white">
                           {s.firstName} {s.lastName}
                         </td>
@@ -187,12 +187,12 @@ export default function SalariesPage() {
                             {s.designation}
                           </span>
                         </td>
-                        <td className="p-3 text-slate-400">{s.phone || '—'}</td>
-                        <td className="p-3 text-right font-mono font-bold text-white">
+                        <td className="p-3 text-slate-400">{s.phone || 'â€”'}</td>
+                        <td className="p-3 text-right font-mono font-bold text-slate-900">
                           {currencySymbol} {s.baseSalary}
                         </td>
                         <td className="p-3 text-center">
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             {s.status}
                           </span>
                         </td>
@@ -218,18 +218,18 @@ export default function SalariesPage() {
           DISBURSE SALARY MODAL
       ========================================== */}
       {payModal.open && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white">Disburse Salary</h3>
-                <p className="text-xs text-emerald-400 font-semibold">
+                <h3 className="text-sm font-bold text-slate-900">Disburse Salary</h3>
+                <p className="text-xs text-emerald-700 font-semibold">
                   {payModal.staff?.firstName} {payModal.staff?.lastName} ({payModal.staff?.designation})
                 </p>
               </div>
               <button
                 onClick={() => setPayModal({ ...payModal, open: false })}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-slate-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -238,7 +238,7 @@ export default function SalariesPage() {
             <form onSubmit={handleDisburseSalary} className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Month</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Month</label>
                   <select
                     value={payModal.month}
                     onChange={(e) => setPayModal({ ...payModal, month: e.target.value })}
@@ -253,7 +253,7 @@ export default function SalariesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Year</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Year</label>
                   <input
                     type="number"
                     value={payModal.year}
@@ -264,7 +264,7 @@ export default function SalariesPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Base Salary ({currencySymbol})
                 </label>
                 <input
@@ -279,7 +279,7 @@ export default function SalariesPage() {
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Bonus / Incentive ({currencySymbol})
                   </label>
                   <input
@@ -292,7 +292,7 @@ export default function SalariesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Deductions / Advance ({currencySymbol})
                   </label>
                   <input
@@ -305,7 +305,7 @@ export default function SalariesPage() {
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs flex justify-between font-bold">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between font-bold">
                 <span className="text-slate-400">Net Disbursed:</span>
                 <span className="font-mono text-emerald-400 text-sm">
                   {currencySymbol}{' '}
@@ -317,17 +317,17 @@ export default function SalariesPage() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setPayModal({ ...payModal, open: false })}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-xs text-slate-300"
+                  className="px-4 py-2 rounded-xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-xs font-bold text-slate-950"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white"
                 >
                   Disburse & Record
                 </button>
@@ -339,3 +339,4 @@ export default function SalariesPage() {
     </div>
   );
 }
+

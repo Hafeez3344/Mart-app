@@ -81,7 +81,7 @@
   }
 
   html, body {
-    @apply bg-primary-50 text-secondary antialiased;
+    @apply bg-slate-50 text-slate-900 antialiased;
     font-family: var(--font-outfit), 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
     font-weight: 500;
     margin: 0;

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -110,7 +110,7 @@ export default function SuppliersPage() {
   });
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
       <Sidebar />
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
@@ -119,11 +119,11 @@ export default function SuppliersPage() {
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <Truck className="w-6 h-6 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <Truck className="w-6 h-6 text-emerald-600" />
                 <span>Suppliers & Vendor Ledgers</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Manage distributor accounts, purchases, and outstanding payable balances
               </p>
             </div>
@@ -139,7 +139,7 @@ export default function SuppliersPage() {
 
           {/* Search */}
           <div className="relative max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+            <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
@@ -167,8 +167,8 @@ export default function SuppliersPage() {
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
-                      <h4 className="text-sm font-bold text-white leading-tight">{s.companyName}</h4>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+                      <h4 className="text-sm font-bold text-slate-900 leading-tight">{s.companyName}</h4>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500">
                         {s._count?.products || 0} Products
                       </span>
                     </div>
@@ -177,7 +177,7 @@ export default function SuppliersPage() {
                       <div className="text-xs text-slate-300 font-medium">Contact: {s.contactPerson}</div>
                     )}
 
-                    <div className="space-y-1 text-[11px] text-slate-400">
+                    <div className="space-y-1 text-[11px] text-slate-500">
                       {s.phone && (
                         <div className="flex items-center gap-1.5">
                           <Phone className="w-3 h-3 text-slate-500" />
@@ -195,7 +195,7 @@ export default function SuppliersPage() {
 
                   <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
                     <div>
-                      <div className="text-[10px] text-slate-400">Payable Balance:</div>
+                      <div className="text-[10px] text-slate-500">Payable Balance:</div>
                       <div className="text-sm font-extrabold font-mono text-rose-400">
                         {currencySymbol} {s.payableBalance}
                       </div>
@@ -228,72 +228,72 @@ export default function SuppliersPage() {
           ADD SUPPLIER MODAL
       ========================================== */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white">Register Vendor / Supplier</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-white">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-sm font-bold text-slate-900">Register Vendor / Supplier</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateSupplier} className="space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Company Name *</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Company Name *</label>
                 <input
                   type="text"
                   required
                   value={addForm.companyName}
                   onChange={(e) => setAddForm({ ...addForm, companyName: e.target.value })}
                   placeholder="e.g. Nestle Pakistan Ltd."
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Contact Person</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Contact Person</label>
                 <input
                   type="text"
                   value={addForm.contactPerson}
                   onChange={(e) => setAddForm({ ...addForm, contactPerson: e.target.value })}
                   placeholder="e.g. Sales Rep Name"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Phone Number</label>
                 <input
                   type="text"
                   value={addForm.phone}
                   onChange={(e) => setAddForm({ ...addForm, phone: e.target.value })}
                   placeholder="+92 300 1234567"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Warehouse Address</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Warehouse Address</label>
                 <input
                   type="text"
                   value={addForm.address}
                   onChange={(e) => setAddForm({ ...addForm, address: e.target.value })}
                   placeholder="City / Industrial Area"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-xs text-slate-300"
+                  className="px-4 py-2 rounded-xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-xs font-bold text-slate-950"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white"
                 >
                   Save Supplier
                 </button>
@@ -307,31 +307,31 @@ export default function SuppliersPage() {
           PAY SUPPLIER MODAL
       ========================================== */}
       {payModal.open && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white">Record Vendor Payment</h3>
-                <p className="text-xs text-emerald-400 font-semibold">{payModal.supplier?.companyName}</p>
+                <h3 className="text-sm font-bold text-slate-900">Record Vendor Payment</h3>
+                <p className="text-xs text-emerald-700 font-semibold">{payModal.supplier?.companyName}</p>
               </div>
               <button
                 onClick={() => setPayModal({ ...payModal, open: false })}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-slate-700"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handlePaySupplier} className="space-y-3">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs flex justify-between">
-                <span className="text-slate-400">Current Payable Balance:</span>
-                <span className="font-mono text-rose-400 font-extrabold">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between">
+                <span className="text-slate-500">Current Payable Balance:</span>
+                <span className="font-mono text-rose-600 font-extrabold">
                   {currencySymbol} {payModal.supplier?.payableBalance}
                 </span>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Payment Amount *
                 </label>
                 <input
@@ -341,18 +341,18 @@ export default function SuppliersPage() {
                   value={payModal.amount}
                   onChange={(e) => setPayModal({ ...payModal, amount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Payment Mode
                 </label>
                 <select
                   value={payModal.paymentMethod}
                   onChange={(e) => setPayModal({ ...payModal, paymentMethod: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 >
                   <option value="CASH">Cash</option>
                   <option value="BANK_TRANSFER">Bank Transfer</option>
@@ -361,7 +361,7 @@ export default function SuppliersPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Reference / Cheque No.
                 </label>
                 <input
@@ -369,21 +369,21 @@ export default function SuppliersPage() {
                   value={payModal.referenceNo}
                   onChange={(e) => setPayModal({ ...payModal, referenceNo: e.target.value })}
                   placeholder="e.g. CHQ-92810"
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setPayModal({ ...payModal, open: false })}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-xs text-slate-300"
+                  className="px-4 py-2 rounded-xl bg-slate-100 text-xs text-slate-600 hover:bg-slate-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-xs font-bold text-slate-950"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white"
                 >
                   Record Payment
                 </button>
@@ -395,4 +395,5 @@ export default function SuppliersPage() {
     </div>
   );
 }
+
 

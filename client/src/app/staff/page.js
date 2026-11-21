@@ -193,8 +193,8 @@ export default function StaffPage() {
         // Offer print slip immediately
         if (res.data.salaryRecord) {
           printStaffSalarySlip({
-            hospitalName: hospitalName || 'SHIFA HOSPITAL SAMARBAGH',
-            hospitalAddress: locationAddress || 'Main Highway, Timergara',
+            hospitalName: hospitalName || 'SUPER MART',
+            hospitalAddress: locationAddress || 'Main Commercial Street',
             staff: {
               ...payingStaff,
               name: `${payingStaff.firstName} ${payingStaff.lastName}`
@@ -284,7 +284,7 @@ export default function StaffPage() {
               </div>
               <div>
                 <h1 className="text-base font-extrabold text-[#1F3F66]">
-                  Hospital Staff & Payroll Management
+                  Mart Staff & Payroll Management
                 </h1>
                 <p className="text-[11px] text-slate-500 font-medium">
                   Manage staff directory profiles, assign base salary rates, and disburse monthly payroll slips
@@ -302,7 +302,7 @@ export default function StaffPage() {
                   email: '',
                   password: '',
                   role: 'STAFF',
-                  designation: 'Staff Nurse',
+                  designation: 'Cashier',
                   baseSalary: '45000',
                   phone: ''
                 });
@@ -428,7 +428,7 @@ export default function StaffPage() {
                       </span>
                     </td>
                     <td className="p-3 text-slate-600">
-                      {s.department?.name || 'Hospital Administration'}
+                      {s.department?.name || 'Mart Operations'}
                     </td>
                     <td className="p-3 font-mono text-slate-600">
                       {s.phone || 'N/A'}
@@ -497,7 +497,7 @@ export default function StaffPage() {
                   onClick={() => setPayingStaff(null)}
                   className="text-slate-400 hover:text-slate-600 font-bold p-1"
                 >
-                  ✕
+                  âœ•
                 </button>
               </div>
 
@@ -662,7 +662,7 @@ export default function StaffPage() {
                   }}
                   className="text-slate-400 hover:text-slate-600 font-bold p-1"
                 >
-                  ✕
+                  âœ•
                 </button>
               </div>
 
@@ -681,7 +681,7 @@ export default function StaffPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Nurse Maria Khan"
+                    placeholder="e.g. Ahmad Ali"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="w-full bg-[#EDF6FF] border border-[#B7D7F0] rounded-xl px-2.5 py-1.5 text-[#1F3F66] font-semibold focus:outline-none"
@@ -694,7 +694,7 @@ export default function StaffPage() {
                     <input
                       type="email"
                       required
-                      placeholder="staff@hospital.com"
+                      placeholder="staff@mart.com"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="w-full bg-[#EDF6FF] border border-[#B7D7F0] rounded-xl px-2.5 py-1.5 text-[#1F3F66] font-semibold focus:outline-none"
@@ -714,7 +714,7 @@ export default function StaffPage() {
                       <input
                         type={showStaffPassword ? 'text' : 'password'}
                         required={!editingStaff}
-                        placeholder={editingStaff ? '•••••••• (leave blank to keep)' : '••••••••'}
+                        placeholder={editingStaff ? 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢ (leave blank to keep)' : 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢'}
                         value={form.password}
                         onChange={(e) => setForm({ ...form, password: e.target.value })}
                         className="w-full bg-[#EDF6FF] border border-[#B7D7F0] rounded-xl pl-2.5 pr-8 py-1.5 text-[#1F3F66] font-semibold focus:outline-none"
@@ -741,7 +741,7 @@ export default function StaffPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Senior Staff Nurse"
+                      placeholder="e.g. Senior Cashier"
                       value={form.designation}
                       onChange={(e) => setForm({ ...form, designation: e.target.value })}
                       className="w-full bg-[#EDF6FF] border border-[#B7D7F0] rounded-xl px-2.5 py-1.5 text-[#1F3F66] font-semibold focus:outline-none"
@@ -781,12 +781,9 @@ export default function StaffPage() {
                       className="w-full bg-[#EDF6FF] border border-[#B7D7F0] rounded-xl px-2.5 py-1.5 text-[#1F3F66] font-bold focus:outline-none"
                     >
                       <option value="STAFF">STAFF (Staff Portal)</option>
-                      <option value="FRONT_DESK">FRONT_DESK</option>
+                      <option value="FRONT_DESK">FRONT_DESK (Cashier / Front Desk)</option>
                       <option value="ACCOUNTANT">ACCOUNTANT</option>
-                      <option value="GYNECOLOGY">GYNECOLOGY (Gyne & Maternity)</option>
-                      <option value="NURSERY_UNIT">NURSERY_UNIT</option>
-                      <option value="PHARMACY">PHARMACY</option>
-                      <option value="LABORATORY">LABORATORY</option>
+                      <option value="ADMIN">ADMIN</option>
                     </select>
                   </div>
                 </div>
@@ -835,10 +832,10 @@ export default function StaffPage() {
   const s = staffProfile?.staff || {
     employeeId: 'EMP-STF-104',
     name: user?.name || 'Staff Member',
-    email: user?.email || 'staff@hospital.com',
+    email: user?.email || 'staff@mart.com',
     phone: 'N/A',
     designation: 'Clinical Staff Member',
-    department: 'Hospital Care & Nursing'
+    department: 'Mart Operations'
   };
 
   const sal = staffProfile?.salarySummary || {
@@ -868,7 +865,7 @@ export default function StaffPage() {
               </span>
             </h1>
             <p className="text-[11px] text-slate-500 font-medium">
-              {s.designation} • {s.department}
+              {s.designation} â€¢ {s.department}
             </p>
           </div>
         </div>
@@ -1091,8 +1088,8 @@ export default function StaffPage() {
                       <td className="p-2.5 text-center">
                         <button
                           onClick={() => printStaffSalarySlip({
-                            hospitalName: hospitalName || 'SHIFA HOSPITAL SAMARBAGH',
-                            hospitalAddress: locationAddress || 'Main Highway, Timergara',
+                            hospitalName: hospitalName || 'SUPER MART',
+                            hospitalAddress: locationAddress || 'Main Commercial Street',
                             staff: s,
                             salaryRecord: rec
                           })}
@@ -1114,3 +1111,4 @@ export default function StaffPage() {
     </div>
   );
 }
+

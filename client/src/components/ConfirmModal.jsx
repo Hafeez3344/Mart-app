@@ -71,7 +71,7 @@ export default function ConfirmModal({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-extrabold text-[#1F3F66]">{title}</h3>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hospital Notification</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mart Notification</span>
             </div>
           </div>
 

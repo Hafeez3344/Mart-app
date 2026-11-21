@@ -587,7 +587,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
           </div>
 
           <div style="text-align: center; margin-top: 25px; font-size: 8pt; color: #94a3b8;">
-            Generated on: ${new Date().toLocaleString()} • Super Mart POS Automated Financial Audit
+            Generated on: ${new Date().toLocaleString()} â€¢ Super Mart POS Automated Financial Audit
           </div>
         </body>
       </html>
@@ -690,18 +690,18 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
 
       {/* 2. Top Executive Annual KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {/* Card 1: Total Hospital Income */}
-        <div className="bg-gradient-to-br from-[#1F3F66] via-[#1b375a] to-slate-900 text-white p-4 rounded-2xl shadow-sm border border-[#1F3F66] relative overflow-hidden">
+        {/* Card 1: Total Mart Income */}
+        <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 text-white p-4 rounded-2xl shadow-sm border border-emerald-700 relative overflow-hidden">
           <div className="absolute right-3 top-3 bg-white/10 p-2 rounded-xl backdrop-blur-xs">
-            <DollarSign className="w-5 h-5 text-emerald-400" />
+            <DollarSign className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-100">
             Total Money Collected (Income {selectedYear})
           </span>
           <h2 className="text-2xl font-black tracking-tight text-white mt-1 mb-1">
             Rs. {(summary.totalNetRevenue || 0).toLocaleString()}
           </h2>
-          <div className="flex items-center gap-1.5 text-xs text-emerald-300 font-semibold">
+          <div className="flex items-center gap-1.5 text-xs text-emerald-100 font-semibold">
             <TrendingUp className="w-3.5 h-3.5" />
             <span>Total Bills Made: Rs. {(summary.totalGrossBilled || 0).toLocaleString()}</span>
           </div>
@@ -719,7 +719,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             Rs. {(summary.totalExpenses || 0).toLocaleString()}
           </h2>
           <p className="text-xs text-slate-500 font-medium">
-            Bills & Expenses: Rs. {(summary.hospitalExpenses || 0).toLocaleString()} • Staff Salaries: Rs. {(summary.salariesDisbursed || 0).toLocaleString()}
+            Bills & Expenses: Rs. {(summary.hospitalExpenses || 0).toLocaleString()} â€¢ Staff Salaries: Rs. {(summary.salariesDisbursed || 0).toLocaleString()}
           </p>
         </div>
 
@@ -760,7 +760,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             {summary.bestMonth?.monthName || summary.bestMonth?.name || (summary.totalNetRevenue > 0 ? 'September' : 'N/A')}
           </h2>
           <p className="text-xs font-semibold text-[#1F3F66]">
-            Rs. {(summary.bestMonth?.netRevenue || 0).toLocaleString()} Collected • {summary.totalTransactions || 0} Patient Visits
+            Rs. {(summary.bestMonth?.netRevenue || 0).toLocaleString()} Collected â€¢ {summary.totalTransactions || 0} Transactions
           </p>
         </div>
       </div>
@@ -903,7 +903,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
               <span>12 Months Store Income & Expenses Calendar ({selectedYear})</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Full 12 calendar rows for each month • Click any row or &quot;Details&quot; button to view full income and expenses
+              Full 12 calendar rows for each month â€¢ Click any row or &quot;Details&quot; button to view full income and expenses
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -973,7 +973,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                             )}
                           </div>
                           <span className="text-[10px] text-slate-400 font-medium">
-                            {m.daysCount} Days • {m.totalTransactions || 0} Cases
+                            {m.daysCount} Days â€¢ {m.totalTransactions || 0} Txns
                           </span>
                         </div>
                       </div>
@@ -985,7 +985,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                         Rs. {(m.opdRevenue || 0).toLocaleString()}
                       </span>
                       {(m.opdCount || 0) > 0 && (
-                        <div className="text-[10px] text-slate-400 font-medium">{m.opdCount} visits</div>
+                        <div className="text-[10px] text-slate-400 font-medium">{m.opdCount} sales</div>
                       )}
                     </td>
 
@@ -995,7 +995,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                         Rs. {(m.labRevenue || 0).toLocaleString()}
                       </span>
                       {(m.labCount || 0) > 0 && (
-                        <div className="text-[10px] text-slate-400 font-medium">{m.labCount} tests</div>
+                        <div className="text-[10px] text-slate-400 font-medium">{m.labCount} items</div>
                       )}
                     </td>
 
@@ -1315,7 +1315,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                           Rs. {(selectedMonth.labRevenue || 0).toLocaleString()}
                         </div>
                         <p className="text-[10px] text-slate-500 mt-0.5">
-                          Gross: Rs. {(selectedMonth.labGross || 0).toLocaleString()} • Disc: Rs. {(selectedMonth.labDiscount || 0).toLocaleString()}
+                          Gross: Rs. {(selectedMonth.labGross || 0).toLocaleString()} â€¢ Disc: Rs. {(selectedMonth.labDiscount || 0).toLocaleString()}
                         </p>
                       </div>
 
@@ -1334,7 +1334,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                           Rs. {(selectedMonth.pharmacyNetRevenue || 0).toLocaleString()}
                         </div>
                         <p className="text-[10px] text-slate-500 mt-0.5">
-                          Sales: Rs. {(selectedMonth.pharmacySales || 0).toLocaleString()} • Dues: +Rs. {(selectedMonth.pharmacyDuesCollected || 0).toLocaleString()} • Ret: -Rs. {(selectedMonth.pharmacyReturns || 0).toLocaleString()}
+                          Sales: Rs. {(selectedMonth.pharmacySales || 0).toLocaleString()} â€¢ Dues: +Rs. {(selectedMonth.pharmacyDuesCollected || 0).toLocaleString()} â€¢ Ret: -Rs. {(selectedMonth.pharmacyReturns || 0).toLocaleString()}
                         </p>
                       </div>
 
@@ -1372,7 +1372,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
                           Rs. {(selectedMonth.nurseryRevenue || 0).toLocaleString()}
                         </div>
                         <p className="text-[10px] text-slate-500 mt-0.5">
-                          Gross: Rs. {(selectedMonth.nurseryGross || 0).toLocaleString()} • Disc: Rs. {(selectedMonth.nurseryDiscount || 0).toLocaleString()}
+                          Gross: Rs. {(selectedMonth.nurseryGross || 0).toLocaleString()} â€¢ Disc: Rs. {(selectedMonth.nurseryDiscount || 0).toLocaleString()}
                         </p>
                       </div>
 
@@ -1581,7 +1581,7 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
             {/* Modal Footer */}
             <div className="bg-slate-50 p-4 border-t border-slate-200 flex items-center justify-between shrink-0">
               <span className="text-xs text-slate-500">
-                Super Mart Annual Financial Analytics • {selectedMonth.monthName} {selectedMonth.year}
+                Super Mart Annual Financial Analytics â€¢ {selectedMonth.monthName} {selectedMonth.year}
               </span>
               <button
                 onClick={closeMonthModal}
@@ -1596,3 +1596,4 @@ export default function YearlyRevenueView({ basePath = '/admin' }) {
     </div>
   );
 }
+

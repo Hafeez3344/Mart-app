@@ -151,29 +151,27 @@ export default function Sidebar() {
       {isOpen && (
         <div
           onClick={closeSidebar}
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden"
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container - Modern Clean White Mart POS */}
       <aside
-        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-50 transition-transform duration-200 ease-in-out shrink-0 select-none ${
+        className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r border-slate-200 flex flex-col z-50 transition-transform duration-200 ease-in-out shrink-0 select-none shadow-xs ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         {/* Top Mart Logo Branding */}
-        <div className="h-16 px-4 border-b border-slate-800 flex items-center justify-between">
-          <Link href="/pos" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-md flex items-center justify-center shrink-0">
-              <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-                <ShoppingCart className="w-4 h-4 text-emerald-400" />
-              </div>
+        <div className="h-16 px-4 border-b border-slate-200 flex items-center justify-between bg-white">
+          <Link href="/pos" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 shadow-sm shadow-emerald-600/20 flex items-center justify-center text-white shrink-0">
+              <ShoppingCart className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-extrabold text-white tracking-tight leading-none truncate max-w-[150px]">
-                {storeName || 'Metro Mart'}
+              <span className="text-sm font-black text-slate-900 tracking-tight leading-tight truncate max-w-[150px]">
+                {storeName || 'Super Mart'}
               </span>
-              <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest mt-0.5">
+              <span className="text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest mt-0.5">
                 Point of Sale
               </span>
             </div>
@@ -181,17 +179,17 @@ export default function Sidebar() {
 
           <button
             onClick={closeSidebar}
-            className="md:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+            className="md:hidden p-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation Groups List */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-800">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200">
           {NAVIGATION_GROUPS.map((group, groupIdx) => (
             <div key={groupIdx} className="space-y-1">
-              <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+              <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">
                 {group.title}
               </div>
 
@@ -206,22 +204,22 @@ export default function Sidebar() {
                     onClick={() => {
                       if (window.innerWidth < 768) closeSidebar();
                     }}
-                    className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all group ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all group ${
                       active
-                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-bold'
+                        ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20 font-bold'
                         : item.highlight
-                        ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                        ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold border border-emerald-200/80'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-3">
                       <Icon
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           active
-                            ? 'text-slate-950 stroke-[2.5]'
+                            ? 'text-white stroke-[2.5]'
                             : item.highlight
-                            ? 'text-emerald-400'
-                            : 'text-slate-500 group-hover:text-emerald-400'
+                            ? 'text-emerald-600 stroke-[2.5]'
+                            : 'text-slate-400 group-hover:text-slate-700'
                         }`}
                       />
                       <span>{item.name}</span>
@@ -229,10 +227,12 @@ export default function Sidebar() {
 
                     {item.badge && (
                       <span
-                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
+                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold ${
                           active
-                            ? 'bg-slate-950 text-white font-bold'
-                            : 'bg-slate-800 text-slate-400 group-hover:text-white'
+                            ? 'bg-emerald-800 text-white'
+                            : item.highlight
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-slate-200 text-slate-600 group-hover:bg-slate-300'
                         }`}
                       >
                         {item.badge}
@@ -246,18 +246,18 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom User Quick Info & Signout */}
-        <div className="p-3 border-t border-slate-800 bg-slate-950/80">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800/80">
-            <div className="flex items-center gap-2 truncate">
-              <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+        <div className="p-3 border-t border-slate-200 bg-slate-50/80">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 shadow-xs">
+            <div className="flex items-center gap-2.5 truncate">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 font-black text-xs flex items-center justify-center shrink-0">
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'C'}
               </div>
               <div className="flex flex-col truncate">
-                <span className="text-xs font-bold text-white truncate">
+                <span className="text-xs font-bold text-slate-800 truncate">
                   {user?.name || 'Cashier'}
                 </span>
-                <span className="text-[10px] text-slate-500 truncate">
-                  {user?.email || 'cashier@mart.com'}
+                <span className="text-[10px] font-medium text-slate-400 truncate">
+                  {user?.role || 'CASHIER'}
                 </span>
               </div>
             </div>
@@ -265,9 +265,9 @@ export default function Sidebar() {
             <button
               onClick={logout}
               title="Sign Out"
-              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors shrink-0"
+              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors shrink-0"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>

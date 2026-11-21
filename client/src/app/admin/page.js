@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -54,7 +54,7 @@ export default function AdminDashboardPage() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
       <Sidebar />
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
@@ -64,11 +64,11 @@ export default function AdminDashboardPage() {
           {/* Header Title & Shortcuts */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <LayoutDashboard className="w-6 h-6 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <LayoutDashboard className="w-6 h-6 text-emerald-600" />
                 <span>Mart Executive Overview</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Real-time supermarket sales, cashier checkouts, inventory health, and store analytics
               </p>
             </div>
@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={fetchStats}
-                className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+                className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-700 border border-slate-200 shadow-xs transition-colors"
                 title="Refresh Analytics"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -84,7 +84,7 @@ export default function AdminDashboardPage() {
 
               <Link
                 href="/pos"
-                className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95"
+                className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs flex items-center gap-2 shadow-md shadow-emerald-600/20 active:scale-95"
               >
                 <Zap className="w-4 h-4 fill-current" />
                 <span>Launch POS Terminal</span>
@@ -95,74 +95,74 @@ export default function AdminDashboardPage() {
           {/* 4 Core Stat Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Today's Sales Revenue */}
-            <div className="p-4 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-between shadow-sm">
+            <div className="p-4 rounded-3xl bg-white border border-slate-200 flex items-center justify-between shadow-xs">
               <div className="space-y-1">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                   Today's Net Revenue
                 </div>
-                <div className="text-2xl font-black font-mono text-emerald-400">
+                <div className="text-2xl font-black font-mono text-emerald-700">
                   {currencySymbol} {stats?.totalRevenueToday || 0}
                 </div>
                 <div className="text-[10px] text-slate-500 font-semibold">
                   {stats?.ordersTodayCount || 0} Orders Processed
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <DollarSign className="w-6 h-6" />
               </div>
             </div>
 
             {/* Gross Profit Today */}
-            <div className="p-4 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-between shadow-sm">
+            <div className="p-4 rounded-3xl bg-white border border-slate-200 flex items-center justify-between shadow-xs">
               <div className="space-y-1">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                   Gross Margin Today
                 </div>
-                <div className="text-2xl font-black font-mono text-indigo-400">
+                <div className="text-2xl font-black font-mono text-indigo-700">
                   {currencySymbol} {stats?.grossProfitToday || 0}
                 </div>
                 <div className="text-[10px] text-slate-500 font-semibold">
                   Sales minus Purchase Cost
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
                 <TrendingUp className="w-6 h-6" />
               </div>
             </div>
 
             {/* Total Active SKUs */}
-            <div className="p-4 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-between shadow-sm">
+            <div className="p-4 rounded-3xl bg-white border border-slate-200 flex items-center justify-between shadow-xs">
               <div className="space-y-1">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                   Active Products
                 </div>
-                <div className="text-2xl font-black text-white">
+                <div className="text-2xl font-black text-slate-900">
                   {stats?.totalProducts || 0}
                 </div>
-                <div className="text-[10px] text-amber-400 font-semibold flex items-center gap-1">
+                <div className="text-[10px] text-amber-600 font-semibold flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3" />
                   <span>{stats?.lowStockCount || 0} Low Stock Alerts</span>
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
                 <Package className="w-6 h-6" />
               </div>
             </div>
 
             {/* Customer Khata Dues */}
-            <div className="p-4 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-between shadow-sm">
+            <div className="p-4 rounded-3xl bg-white border border-slate-200 flex items-center justify-between shadow-xs">
               <div className="space-y-1">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
                   Customer Dues (Khata)
                 </div>
-                <div className="text-2xl font-black font-mono text-rose-400">
+                <div className="text-2xl font-black font-mono text-rose-600">
                   {currencySymbol} {stats?.totalCustomerDues || 0}
                 </div>
                 <div className="text-[10px] text-slate-500 font-semibold">
                   Across {stats?.totalCustomers || 0} Registered Customers
                 </div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
                 <Users className="w-6 h-6" />
               </div>
             </div>
@@ -172,53 +172,53 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <Link
               href="/pos"
-              className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex items-center gap-3 transition-colors group"
+              className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center gap-3 transition-colors group shadow-xs"
             >
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
+              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                 <ShoppingCart className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">POS Terminal</div>
-                <div className="text-[10px] text-slate-400">Barcode checkout</div>
+                <div className="text-xs font-bold text-slate-900">POS Terminal</div>
+                <div className="text-[10px] text-slate-500">Barcode checkout</div>
               </div>
             </Link>
 
             <Link
               href="/products"
-              className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex items-center gap-3 transition-colors group"
+              className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center gap-3 transition-colors group shadow-xs"
             >
-              <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-slate-950 transition-colors">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                 <Package className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Add Product</div>
-                <div className="text-[10px] text-slate-400">Manage catalog</div>
+                <div className="text-xs font-bold text-slate-900">Add Product</div>
+                <div className="text-[10px] text-slate-500">Manage catalog</div>
               </div>
             </Link>
 
             <Link
               href="/purchases"
-              className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex items-center gap-3 transition-colors group"
+              className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center gap-3 transition-colors group shadow-xs"
             >
-              <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+              <div className="p-2 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors">
                 <Truck className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Stock-In Purchase</div>
-                <div className="text-[10px] text-slate-400">Receive goods</div>
+                <div className="text-xs font-bold text-slate-900">Stock-In Purchase</div>
+                <div className="text-[10px] text-slate-500">Receive goods</div>
               </div>
             </Link>
 
             <Link
               href="/register"
-              className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex items-center gap-3 transition-colors group"
+              className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center gap-3 transition-colors group shadow-xs"
             >
-              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-slate-950 transition-colors">
+              <div className="p-2 rounded-xl bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
                 <Banknote className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Cash Drawer</div>
-                <div className="text-[10px] text-slate-400">Shift audits</div>
+                <div className="text-xs font-bold text-slate-900">Cash Drawer</div>
+                <div className="text-[10px] text-slate-500">Shift audits</div>
               </div>
             </Link>
           </div>
@@ -226,10 +226,10 @@ export default function AdminDashboardPage() {
           {/* 7-Day Revenue Trend & Payment Methods Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Weekly Trend Bar Cards */}
-            <div className="lg:col-span-2 p-5 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="lg:col-span-2 p-5 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-600" />
                   <span>7-Day Sales Performance</span>
                 </h3>
               </div>
@@ -242,14 +242,14 @@ export default function AdminDashboardPage() {
 
                   return (
                     <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                      <div className="text-[10px] font-mono text-emerald-400 font-bold truncate">
+                      <div className="text-[10px] font-mono text-emerald-700 font-bold truncate">
                         {currencySymbol}{day.revenue}
                       </div>
                       <div
                         style={{ height: `${heightPercent}%` }}
                         className="w-full max-w-[40px] rounded-t-xl bg-gradient-to-t from-emerald-600 to-teal-400 transition-all shadow-md shadow-emerald-500/10"
                       />
-                      <span className="text-[10px] text-slate-400 font-medium truncate max-w-[50px]">
+                      <span className="text-[10px] text-slate-500 font-medium truncate max-w-[50px]">
                         {day.day.split(',')[0]}
                       </span>
                     </div>
@@ -259,49 +259,49 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Payment Modes Today */}
-            <div className="p-5 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-emerald-400" />
+            <div className="p-5 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-xs">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-emerald-600" />
                 <span>Today's Payment Modes</span>
               </h3>
 
               <div className="space-y-3">
-                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-slate-300">
-                    <Banknote className="w-4 h-4 text-emerald-400" />
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-slate-700">
+                    <Banknote className="w-4 h-4 text-emerald-600" />
                     <span>Cash</span>
                   </span>
-                  <span className="font-mono font-bold text-white">
+                  <span className="font-mono font-bold text-slate-900">
                     {currencySymbol} {stats?.paymentBreakdown?.cash || 0}
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-slate-300">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-slate-700">
                     <CreditCard className="w-4 h-4 text-blue-400" />
                     <span>Card / POS</span>
                   </span>
-                  <span className="font-mono font-bold text-white">
+                  <span className="font-mono font-bold text-slate-900">
                     {currencySymbol} {stats?.paymentBreakdown?.card || 0}
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-slate-300">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-slate-700">
                     <QrCode className="w-4 h-4 text-purple-400" />
                     <span>Online / QR</span>
                   </span>
-                  <span className="font-mono font-bold text-white">
+                  <span className="font-mono font-bold text-slate-900">
                     {currencySymbol} {stats?.paymentBreakdown?.online || 0}
                   </span>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-2 text-slate-300">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-2 text-slate-700">
                     <Users className="w-4 h-4 text-rose-400" />
                     <span>Khata Credit</span>
                   </span>
-                  <span className="font-mono font-bold text-white">
+                  <span className="font-mono font-bold text-slate-900">
                     {currencySymbol} {stats?.paymentBreakdown?.credit || 0}
                   </span>
                 </div>
@@ -312,18 +312,18 @@ export default function AdminDashboardPage() {
           {/* Recent Live Sales Table */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Receipt className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <Receipt className="w-4 h-4 text-emerald-600" />
                 <span>Recent Completed Sales</span>
               </h3>
-              <Link href="/sales" className="text-xs font-semibold text-emerald-400 hover:underline">
-                View All Invoices →
+              <Link href="/sales" className="text-xs font-semibold text-emerald-700 hover:underline">
+                View All Invoices â†’
               </Link>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-bold border-b border-slate-800">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200">
                   <tr>
                     <th className="p-3">Invoice #</th>
                     <th className="p-3">Customer</th>
@@ -333,25 +333,25 @@ export default function AdminDashboardPage() {
                     <th className="p-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-medium">
+                <tbody className="divide-y divide-slate-100 font-medium">
                   {!stats?.recentSales || stats.recentSales.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-slate-500">
+                      <td colSpan={6} className="p-6 text-center text-slate-400">
                         No sales recorded yet.
                       </td>
                     </tr>
                   ) : (
                     stats.recentSales.map(s => (
-                      <tr key={s.id} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="p-3 font-mono text-emerald-400 font-bold">{s.invoiceNo}</td>
+                      <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3 font-mono text-emerald-700 font-bold">{s.invoiceNo}</td>
                         <td className="p-3 font-bold text-white">{s.customerName}</td>
                         <td className="p-3 text-slate-400">{s.cashierName || 'Cashier'}</td>
                         <td className="p-3 text-center">
-                          <span className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-semibold text-slate-300">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-[10px] font-semibold text-slate-600 border border-slate-200">
                             {s.paymentMethod}
                           </span>
                         </td>
-                        <td className="p-3 text-right font-mono font-bold text-white">
+                        <td className="p-3 text-right font-mono font-bold text-slate-900">
                           {currencySymbol} {s.netTotal}
                         </td>
                         <td className="p-3 text-right">
@@ -364,7 +364,7 @@ export default function AdminDashboardPage() {
                                 phone
                               })
                             }
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-700 hover:bg-emerald-50"
                             title="Reprint Thermal Slip"
                           >
                             <Printer className="w-3.5 h-3.5" />
@@ -382,3 +382,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+

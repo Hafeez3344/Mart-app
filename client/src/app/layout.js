@@ -59,7 +59,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={outfit.variable} suppressHydrationWarning>
-      <body className={`${outfit.className} font-sans bg-slate-950 text-white antialiased`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  for (var i = 0; i < registrations.length; i++) {
+                    registrations[i].unregister();
+                  }
+                });
+              }
+            `,
+          }}
+        />
+      </head>
+      <body className={`${outfit.className} font-sans bg-slate-50 text-slate-900 antialiased`} suppressHydrationWarning>
         <ReduxProvider>
           <AuthProvider>
             <CurrencyProvider>
