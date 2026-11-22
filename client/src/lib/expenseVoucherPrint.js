@@ -4,7 +4,7 @@
  */
 
 export const printExpenseVoucher = ({
-  storeName = 'METRO SUPER MART & GROCERS',
+  storeName = 'AL MASOOM SUPAR MART',
   hospitalName = '',
   storeAddress = 'Main Commercial Boulevard, Phase 4, City Center',
   hospitalAddress = '',
@@ -12,7 +12,7 @@ export const printExpenseVoucher = ({
 }) => {
   if (!expense) return;
 
-  const displayName = storeName || hospitalName || 'METRO SUPER MART';
+  const displayName = storeName || hospitalName || 'AL MASOOM SUPAR MART';
   const displayAddress = storeAddress || hospitalAddress || 'Main Commercial Boulevard';
 
   const win = window.open('', '_blank');

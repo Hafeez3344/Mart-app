@@ -52,7 +52,7 @@ const outfit = localFont({
 });
 
 export const metadata = {
-  title: 'Metro Super Mart - Modern Point of Sale (POS)',
+  title: 'Al Masoom Supar Mart - Modern Point of Sale (POS)',
   description: 'High-Performance Supermarket & Retail Point of Sale (POS) and Inventory Management System'
 };
 

@@ -38,10 +38,10 @@ const getStoreSettings = async (req, res) => {
     if (!settings) {
       settings = await prisma.storeSetting.create({
         data: {
-          storeName: 'Metro Super Mart & Grocers',
+          storeName: 'Al Masoom Supar Mart',
           tagline: 'Fresh Quality Products, Best Daily Prices',
           phone: '+92 300 1234567',
-          email: 'info@metromart.pk',
+          email: 'info@almasoommart.pk',
           address: 'Main Commercial Boulevard, Phase 4, City Center',
           taxNumber: 'NTN-5829104-1',
           currencyCode: 'PKR',
@@ -129,7 +129,7 @@ const updateStoreSettings = async (req, res) => {
     } else {
       settings = await prisma.storeSetting.create({
         data: {
-          storeName: name || 'Metro Super Mart & Grocers',
+          storeName: name || 'Al Masoom Supar Mart',
           ...data
         }
       });

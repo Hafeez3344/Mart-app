@@ -35,7 +35,7 @@ export default function RootHomePage() {
 
         <div className="space-y-2">
           <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            {storeName || 'Metro Super Mart'}
+            {storeName || 'Al Masoom Supar Mart'}
           </h1>
           <p className="text-slate-400 text-sm">
             {tagline || 'Point of Sale & Inventory Management System'}

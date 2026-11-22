@@ -402,7 +402,7 @@ export const printThermalPharmacyReceipt = async (options = {}, forceBrowserPrin
       }
     }
 
-    hospName = hospName || 'Metro Super Mart & Grocers';
+    hospName = hospName || 'Al Masoom Supar Mart';
     hospAddress = hospAddress || 'Main Commercial Boulevard, Phase 4, City Center';
     hospPhone = hospPhone || '+92 300 1234567';
 

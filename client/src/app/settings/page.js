@@ -36,15 +36,15 @@ export default function MartSettingsPage() {
   const [msg, setMsg] = useState({ type: '', text: '' });
 
   const [form, setForm] = useState({
-    storeName: 'Metro Super Mart & Grocers',
+    storeName: 'Al Masoom Supar Mart',
     tagline: 'Fresh Quality Products, Best Daily Prices',
     phone: '+92 300 1234567',
-    email: 'info@metromart.pk',
+    email: 'info@almasoommart.pk',
     address: 'Main Commercial Boulevard, Phase 4, City Center',
     taxNumber: 'NTN-5829104-1',
     currencyCode: 'PKR',
     currencySymbol: 'Rs.',
-    receiptHeader: 'Thank you for shopping at Metro Super Mart!',
+    receiptHeader: 'Thank you for shopping at Al Masoom Supar Mart!',
     receiptFooter: 'Items can be exchanged within 7 days with valid receipt.',
     paperWidth: 80,
     enableSound: true,
@@ -57,10 +57,10 @@ export default function MartSettingsPage() {
       const res = await api.get('/settings');
       if (res.data?.success && res.data.settings) {
         setForm({
-          storeName: res.data.settings.storeName || res.data.settings.hospitalName || 'Metro Super Mart & Grocers',
+          storeName: res.data.settings.storeName || res.data.settings.hospitalName || 'Al Masoom Supar Mart',
           tagline: res.data.settings.tagline || 'Fresh Quality Products, Best Daily Prices',
           phone: res.data.settings.phone || '+92 300 1234567',
-          email: res.data.settings.email || 'info@metromart.pk',
+          email: res.data.settings.email || 'info@almasoommart.pk',
           address: res.data.settings.address || res.data.settings.locationAddress || 'Main Commercial Boulevard',
           taxNumber: res.data.settings.taxNumber || res.data.settings.taxRegistrationNo || 'NTN-5829104-1',
           currencyCode: res.data.settings.currencyCode || 'PKR',

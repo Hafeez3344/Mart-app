@@ -5,7 +5,7 @@
 
 export const printReportsAuditPdf = (reportData = {}) => {
   const {
-    hospitalName = reportData.storeName || 'METRO SUPER MART & GROCERS',
+    hospitalName = reportData.storeName || 'AL MASOOM SUPAR MART',
     hospitalAddress = reportData.locationAddress || reportData.address || 'Main Commercial Boulevard, Phase 4, City Center',
     hospitalPhone = reportData.phone || '+92 300 1234567',
     period = 'today',

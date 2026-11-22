@@ -7,18 +7,18 @@ const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
   const [settings, setSettings] = useState({
-    storeName: 'Metro Super Mart & Grocers',
-    hospitalName: 'Metro Super Mart & Grocers', // Compatibility alias
+    storeName: 'Al Masoom Supar Mart',
+    hospitalName: 'Al Masoom Supar Mart', // Compatibility alias
     tagline: 'Fresh Quality Products, Best Daily Prices',
     phone: '+92 300 1234567',
-    email: 'info@metromart.pk',
+    email: 'info@almasoommart.pk',
     address: 'Main Commercial Boulevard, Phase 4, City Center',
     locationAddress: 'Main Commercial Boulevard, Phase 4, City Center',
     taxNumber: 'NTN-5829104-1',
     taxRegistrationNo: 'NTN-5829104-1',
     currencyCode: 'PKR',
     currencySymbol: 'Rs.',
-    receiptHeader: 'Thank you for shopping at Metro Super Mart!',
+    receiptHeader: 'Thank you for shopping at Al Masoom Supar Mart!',
     receiptFooter: 'Items can be exchanged within 7 days with valid receipt.',
     paperWidth: 80,
     enableSound: true,
@@ -32,8 +32,8 @@ export function StoreProvider({ children }) {
       if (res.data?.success && res.data?.settings) {
         setSettings({
           ...res.data.settings,
-          storeName: res.data.settings.storeName || res.data.settings.hospitalName || 'Metro Super Mart & Grocers',
-          hospitalName: res.data.settings.storeName || res.data.settings.hospitalName || 'Metro Super Mart & Grocers',
+          storeName: res.data.settings.storeName || res.data.settings.hospitalName || 'Al Masoom Supar Mart',
+          hospitalName: res.data.settings.storeName || res.data.settings.hospitalName || 'Al Masoom Supar Mart',
           address: res.data.settings.address || res.data.settings.locationAddress || 'Main Commercial Boulevard',
           locationAddress: res.data.settings.address || res.data.settings.locationAddress || 'Main Commercial Boulevard',
           taxNumber: res.data.settings.taxNumber || res.data.settings.taxRegistrationNo || 'NTN-5829104-1',
@@ -53,11 +53,11 @@ export function StoreProvider({ children }) {
 
   const value = {
     settings,
-    storeName: settings.storeName || 'Metro Super Mart & Grocers',
-    hospitalName: settings.storeName || 'Metro Super Mart & Grocers',
+    storeName: settings.storeName || 'Al Masoom Supar Mart',
+    hospitalName: settings.storeName || 'Al Masoom Supar Mart',
     tagline: settings.tagline || 'Fresh Quality Products, Best Daily Prices',
     phone: settings.phone || '+92 300 1234567',
-    email: settings.email || 'info@metromart.pk',
+    email: settings.email || 'info@almasoommart.pk',
     address: settings.address || 'Main Commercial Boulevard, Phase 4, City Center',
     locationAddress: settings.address || 'Main Commercial Boulevard, Phase 4, City Center',
     taxNumber: settings.taxNumber || 'NTN-5829104-1',
@@ -83,11 +83,11 @@ export function useStore() {
   const context = useContext(StoreContext);
   if (!context) {
     return {
-      storeName: 'Metro Super Mart & Grocers',
-      hospitalName: 'Metro Super Mart & Grocers',
+      storeName: 'Al Masoom Supar Mart',
+      hospitalName: 'Al Masoom Supar Mart',
       tagline: 'Fresh Quality Products, Best Daily Prices',
       phone: '+92 300 1234567',
-      email: 'info@metromart.pk',
+      email: 'info@almasoommart.pk',
       address: 'Main Commercial Boulevard, Phase 4, City Center',
       locationAddress: 'Main Commercial Boulevard, Phase 4, City Center',
       currencySymbol: 'Rs.',

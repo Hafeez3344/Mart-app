@@ -531,7 +531,7 @@ function buildMasterReceiptEscPos({
  * Tabular format with solid CP437 box borders matching the on-screen receipt.
  */
 function buildPharmacyReceiptEscPos({
-  hospitalName = 'Metro Super Mart & Grocers',
+  hospitalName = 'Al Masoom Supar Mart',
   hospitalAddress = '',
   hospitalPhone = '',
   invoiceNo = 'MART-INV',

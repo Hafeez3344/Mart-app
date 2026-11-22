@@ -580,10 +580,10 @@ model Expense {
 
 model StoreSetting {
   id               String   @id @default(uuid())
-  storeName        String   @default("Metro Super Mart & Grocers")
+  storeName        String   @default("Al Masoom Supar Mart")
   tagline          String   @default("Fresh Quality Products, Best Daily Prices")
   phone            String   @default("+92 300 1234567")
-  email            String   @default("info@metromart.pk")
+  email            String   @default("info@almasoommart.pk")
   address          String   @default("Main Commercial Boulevard, Phase 4, City Center")
   taxNumber        String   @default("NTN-5829104-1")
   currencyCode     String   @default("PKR")

@@ -8,3 +8,5 @@ if exist "dist\SuperMartPOS-win32-x64\SuperMartPOS.exe" (
     echo Packaged executable not found, launching via Electron runtime...
     start "" "node_modules\electron\dist\electron.exe" .
 )
+
+
