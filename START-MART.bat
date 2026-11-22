@@ -32,7 +32,8 @@ echo.
 :: STEP 2: Start Backend (Express API on port 5000)
 :: -------------------------------------------------------
 echo [2/3] Starting Backend API server (port 5000)...
-set SERVER_DIR=F:\Mart-System\COMPLETE-HMS-main\server
+set ROOT_DIR=%~dp0
+set SERVER_DIR=%ROOT_DIR%server
 start "Mart POS - Backend [Port 5000]" cmd /k "cd /d %SERVER_DIR% && set PATH=%PG_BIN%;%PATH% && node src/server.js"
 timeout /t 3 /nobreak >nul
 echo       Backend started at http://localhost:5000
@@ -43,7 +44,7 @@ echo.
 :: STEP 3: Start Frontend (Next.js on port 3000)
 :: -------------------------------------------------------
 echo [3/3] Starting Frontend (Next.js) on port 3000...
-set CLIENT_DIR=F:\Mart-System\COMPLETE-HMS-main\client
+set CLIENT_DIR=%ROOT_DIR%client
 start "Mart POS - Frontend [Port 3000]" cmd /k "cd /d %CLIENT_DIR% && node node_modules/next/dist/bin/next dev"
 timeout /t 5 /nobreak >nul
 echo       Frontend starting at http://localhost:3000

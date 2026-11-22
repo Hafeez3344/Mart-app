@@ -103,15 +103,9 @@ export const AuthProvider = ({ children }) => {
         message: res.data.message || 'Login failed. Please check your credentials.',
       };
     } catch (err) {
-      if (!err.response) {
-        return {
-          success: false,
-          message: 'Unable to connect to backend server. If using Vercel, please ensure your backend API is deployed and NEXT_PUBLIC_API_URL is configured.',
-        };
-      }
       return {
         success: false,
-        message: err.response.data?.message || 'Login failed. Please check your credentials.',
+        message: err.response?.data?.message || 'Login failed. Please check your credentials.',
       };
     }
   };

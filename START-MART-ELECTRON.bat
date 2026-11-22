@@ -8,7 +8,8 @@ echo   SUPER MART POINT OF SALE (ELECTRON DESKTOP ENGINE)
 echo  =====================================================
 echo.
 
-set ROOT_DIR=F:\Mart-System\COMPLETE-HMS-main
+set ROOT_DIR=%~dp0
+if "%ROOT_DIR:~-1%"=="\" set ROOT_DIR=%ROOT_DIR:~0,-1%
 set PG_BIN=F:\pg17\pgsql\bin
 set PATH=%PG_BIN%;%PATH%
 
