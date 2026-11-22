@@ -77,6 +77,7 @@ echo [DONE] Permanent Static IP set to: 192.168.10.26
 echo You can now access HMS at: http://192.168.10.26:3000
 goto end
 
+
 :setdhcp
 echo.
 echo Resetting Ethernet to Automatic DHCP...

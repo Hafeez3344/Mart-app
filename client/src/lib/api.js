@@ -1,11 +1,20 @@
 import axios from 'axios';
 
+// Helper to check if hostname is a local LAN IP (e.g. 192.168.x.x, 10.x.x.x)
+const isLocalLanIp = (hostname) => {
+  return /^192\.168\.\d+\.\d+$/.test(hostname) ||
+         /^10\.\d+\.\d+\.\d+$/.test(hostname) ||
+         /^172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+$/.test(hostname);
+};
+
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL !== 'http://localhost:5000/api') {
     return process.env.NEXT_PUBLIC_API_URL;
   }
   if (typeof window !== 'undefined' && window.location?.hostname) {
-    return `${window.location.protocol}//${window.location.hostname}:5000/api`;
+    if (isLocalLanIp(window.location.hostname)) {
+      return `${window.location.protocol}//${window.location.hostname}:5000/api`;
+    }
   }
   return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 };
@@ -17,12 +26,12 @@ const api = axios.create({
   },
 });
 
-// Interceptor to attach JWT token to every request and auto-adapt to current host
+// Interceptor to attach JWT token to every request and auto-adapt to LAN host IP
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      // If accessed via local Wi-Fi IP (e.g. 192.168.x.x) or domain, adapt baseURL dynamically
-      if (window.location?.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      // Only rewrite port 5000 if accessed via local LAN IP (not on cloud hosts like Vercel)
+      if (window.location?.hostname && isLocalLanIp(window.location.hostname)) {
         config.baseURL = `${window.location.protocol}//${window.location.hostname}:5000/api`;
       }
       const token = localStorage.getItem('hms_token') || localStorage.getItem('token');
