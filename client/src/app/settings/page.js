@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+import RoleGuard from '../../components/RoleGuard';
 import api from '../../lib/api';
 import { useStore } from '../../context/StoreContext';
 import {
@@ -137,7 +138,8 @@ export default function MartSettingsPage() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Header />
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+        <RoleGuard allowedRoles={['ADMIN']}>
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
@@ -172,7 +174,7 @@ export default function MartSettingsPage() {
 
           <form onSubmit={handleSave} className="space-y-6">
             {/* Store Identity */}
-            <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Store className="w-4 h-4 text-emerald-600" />
                 <span>Store Identity & Business Profile</span>
@@ -261,14 +263,14 @@ export default function MartSettingsPage() {
                     value={form.currencySymbol}
                     onChange={(e) => setForm({ ...form, currencySymbol: e.target.value })}
                     placeholder="Rs., $, SAR, AED"
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-emerald-400 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-emerald-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
               </div>
             </div>
 
             {/* Thermal Printer & Receipt Settings */}
-            <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Printer className="w-4 h-4 text-emerald-600" />
                 <span>Thermal Printer & Receipt Customization</span>
@@ -342,12 +344,12 @@ export default function MartSettingsPage() {
             </div>
 
             {/* Database Backup & Hardware Testing */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-              <div className="flex items-center gap-3 pb-3 border-b border-slate-800">
-                <Database className="w-5 h-5 text-indigo-400" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs space-y-4">
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
+                <Database className="w-5 h-5 text-indigo-600" />
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Database Backup & Hardware Testing</h3>
-                  <p className="text-xs text-slate-400">PostgreSQL automated snapshot and POS hardware pulse</p>
+                  <p className="text-xs text-slate-500">PostgreSQL automated snapshot and POS hardware pulse</p>
                 </div>
               </div>
 
@@ -355,10 +357,10 @@ export default function MartSettingsPage() {
                 <div
                   className={`p-3 rounded-xl text-xs font-semibold ${
                     backupResult.type === 'success'
-                      ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                      ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
                       : backupResult.type === 'error'
-                      ? 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
-                      : 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-400'
+                      ? 'bg-rose-50 border border-rose-200 text-rose-700'
+                      : 'bg-indigo-50 border border-indigo-200 text-indigo-700'
                   }`}
                 >
                   {backupResult.text}
@@ -370,7 +372,7 @@ export default function MartSettingsPage() {
                   type="button"
                   onClick={handleBackup}
                   disabled={backupLoading}
-                  className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-md transition-all active:scale-95"
+                  className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-sm transition-all active:scale-95"
                 >
                   <Download className="w-4 h-4" />
                   <span>{backupLoading ? 'Creating Backup...' : 'Create Instant DB Backup (.sql)'}</span>
@@ -379,9 +381,9 @@ export default function MartSettingsPage() {
                 <button
                   type="button"
                   onClick={handleTestDrawer}
-                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs flex items-center gap-2 border border-slate-700 transition-all active:scale-95"
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-2 border border-slate-200 transition-all active:scale-95"
                 >
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <Zap className="w-4 h-4 text-amber-500" />
                   <span>Test Cash Drawer Pulse</span>
                 </button>
               </div>
@@ -400,6 +402,7 @@ export default function MartSettingsPage() {
             </div>
           </form>
         </div>
+        </RoleGuard>
       </div>
     </div>
   );

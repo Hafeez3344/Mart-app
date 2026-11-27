@@ -95,12 +95,20 @@ const createSale = async (req, res) => {
 
     // Execute atomic transaction: Create Sale + Items + Deduct Stock + Update Customer Credit (if Due)
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Deduct Stock for items that have a productId
+      // 1. Deduct Stock for items that have a productId (handling Multi-Unit conversions: Carton, Pack/Box, Piece)
       for (const item of items) {
         if (item.productId) {
           const product = await tx.product.findUnique({ where: { id: item.productId } });
           if (product) {
-            const deductionQty = parseFloat(item.quantity) || 1;
+            let unitMultiplier = 1;
+            const itemUnit = (item.unit || '').toLowerCase();
+            if (itemUnit.includes('carton') || itemUnit.includes('ctn')) {
+              unitMultiplier = (product.piecesPerPack || 1) * (product.packsPerCarton || 1);
+            } else if (itemUnit.includes('pack') || itemUnit.includes('box') || itemUnit.includes('dabbi')) {
+              unitMultiplier = product.piecesPerPack || 1;
+            }
+
+            const deductionQty = (parseFloat(item.quantity) || 1) * unitMultiplier;
             const updatedStock = Math.max(0, product.stockQuantity - deductionQty);
             await tx.product.update({
               where: { id: item.productId },

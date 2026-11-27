@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+import RoleGuard from '../../components/RoleGuard';
 import Link from 'next/link';
 import api from '../../lib/api';
 import { printThermalMartReceipt } from '../../lib/thermalPrint';
@@ -54,13 +55,8 @@ export default function AdminDashboardPage() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
-      <Sidebar />
-
-      <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <Header />
-
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+    <RoleGuard allowedRoles={['ADMIN']}>
+      <div className="space-y-6">
           {/* Header Title & Shortcuts */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -378,8 +374,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    </RoleGuard>
   );
 }
 

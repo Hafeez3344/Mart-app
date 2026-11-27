@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -146,23 +146,23 @@ export default function RegisterShiftsPage() {
 
           {/* Active Shift Card or Open Shift Prompt */}
           {currentShift ? (
-            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs shadow-xl space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-400">
+                  <div className="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600">
                     <Unlock className="w-6 h-6" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-base font-extrabold text-white">
+                      <h3 className="text-base font-extrabold text-slate-900">
                         Active Shift: {currentShift.shiftNo}
                       </h3>
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
                         OPEN
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400">
-                      Cashier: <strong className="text-white">{currentShift.cashierName}</strong> â€¢ Opened:{' '}
+                    <p className="text-xs text-slate-500">
+                      Cashier: <strong className="text-slate-800">{currentShift.cashierName}</strong> • Opened:{' '}
                       {new Date(currentShift.openedAt).toLocaleTimeString()}
                     </p>
                   </div>
@@ -171,7 +171,7 @@ export default function RegisterShiftsPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setShowCashMovementModal(true)}
-                    className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-900 transition-colors"
+                    className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 border border-slate-200 transition-colors"
                   >
                     Cash In / Out
                   </button>
@@ -180,7 +180,7 @@ export default function RegisterShiftsPage() {
                       setClosingCash(expectedInDrawer.toString());
                       setShowCloseModal(true);
                     }}
-                    className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs font-bold text-slate-900 shadow-lg shadow-rose-500/20 transition-colors"
+                    className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-xs font-bold text-white shadow-sm transition-colors"
                   >
                     Close Shift
                   </button>
@@ -189,49 +189,49 @@ export default function RegisterShiftsPage() {
 
               {/* Drawer Financials Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
                   <div className="text-[10px] uppercase font-bold text-slate-500">Opening Float</div>
-                  <div className="text-lg font-black font-mono text-white mt-0.5">
+                  <div className="text-lg font-black font-mono text-slate-900 mt-0.5">
                     {currencySymbol} {currentShift.openingCash}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
                   <div className="text-[10px] uppercase font-bold text-slate-500">Cash Sales</div>
-                  <div className="text-lg font-black font-mono text-emerald-400 mt-0.5">
+                  <div className="text-lg font-black font-mono text-emerald-600 mt-0.5">
                     {currencySymbol} {currentShift.cashSales}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200">
                   <div className="text-[10px] uppercase font-bold text-slate-500">Petty Cash Out</div>
-                  <div className="text-lg font-black font-mono text-rose-400 mt-0.5">
+                  <div className="text-lg font-black font-mono text-rose-600 mt-0.5">
                     -{currencySymbol} {currentShift.cashOut}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-2xl border border-emerald-500/30">
-                  <div className="text-[10px] uppercase font-bold text-emerald-400">Expected in Drawer</div>
-                  <div className="text-lg font-black font-mono text-emerald-400 mt-0.5">
+                <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
+                  <div className="text-[10px] uppercase font-bold text-emerald-700">Expected in Drawer</div>
+                  <div className="text-lg font-black font-mono text-emerald-700 mt-0.5">
                     {currencySymbol} {expectedInDrawer}
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="p-8 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-4">
-              <div className="inline-flex p-3 rounded-full bg-slate-800 text-slate-400">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-xs text-center space-y-4">
+              <div className="inline-flex p-3 rounded-full bg-slate-100 text-slate-500">
                 <Lock className="w-8 h-8" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">No Active Cash Register Shift</h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                <h3 className="text-base font-bold text-slate-900">No Active Cash Register Shift</h3>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                   Open your cash drawer shift before beginning POS checkout to ensure accurate float reconciliation.
                 </p>
               </div>
               <button
                 onClick={() => setShowOpenModal(true)}
-                className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-xs shadow-lg shadow-emerald-500/20"
+                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-sm"
               >
                 Open Register Shift
               </button>
@@ -279,11 +279,11 @@ export default function RegisterShiftsPage() {
                           <td className="p-3 text-right font-mono text-slate-300">
                             {currencySymbol} {s.expectedCash || 0}
                           </td>
-                          <td className="p-3 text-right font-mono text-white font-bold">
+                          <td className="p-3 text-right font-mono text-slate-900 font-bold">
                             {currencySymbol} {s.closingCash || 0}
                           </td>
                           <td className="p-3 text-right font-mono font-bold">
-                            <span className={s.difference >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
+                            <span className={s.difference >= 0 ? 'text-emerald-600' : 'text-rose-600'}>
                               {s.difference >= 0 ? '+' : ''}
                               {currencySymbol} {s.difference || 0}
                             </span>
@@ -293,7 +293,7 @@ export default function RegisterShiftsPage() {
                               className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                                 s.status === 'OPEN'
                                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                  : 'bg-slate-800 text-slate-400'
+                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
                               }`}
                             >
                               {s.status}
@@ -315,7 +315,7 @@ export default function RegisterShiftsPage() {
       ========================================== */}
       {showOpenModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="text-sm font-bold text-slate-900">Open Cash Register Shift</h3>
               <button onClick={() => setShowOpenModal(false)} className="text-slate-400 hover:text-slate-700">
@@ -364,7 +364,7 @@ export default function RegisterShiftsPage() {
       ========================================== */}
       {showCloseModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Close Register & Audit</h3>
@@ -423,7 +423,7 @@ export default function RegisterShiftsPage() {
       ========================================== */}
       {showCashMovementModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="text-sm font-bold text-slate-900">Cash Drawer Movement</h3>
               <button

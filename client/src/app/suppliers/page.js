@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -145,7 +145,7 @@ export default function SuppliersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search vendor name, contact person, phone..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-2xs"
             />
           </div>
 
@@ -163,40 +163,40 @@ export default function SuppliersPage() {
               filtered.map(s => (
                 <div
                   key={s.id}
-                  className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-3"
+                  className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between space-y-3"
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between">
                       <h4 className="text-sm font-bold text-slate-900 leading-tight">{s.companyName}</h4>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
                         {s._count?.products || 0} Products
                       </span>
                     </div>
 
                     {s.contactPerson && (
-                      <div className="text-xs text-slate-300 font-medium">Contact: {s.contactPerson}</div>
+                      <div className="text-xs text-slate-600 font-medium">Contact: {s.contactPerson}</div>
                     )}
 
                     <div className="space-y-1 text-[11px] text-slate-500">
                       {s.phone && (
                         <div className="flex items-center gap-1.5">
-                          <Phone className="w-3 h-3 text-slate-500" />
+                          <Phone className="w-3 h-3 text-slate-400" />
                           <span>{s.phone}</span>
                         </div>
                       )}
                       {s.address && (
                         <div className="flex items-center gap-1.5">
-                          <MapPin className="w-3 h-3 text-slate-500" />
+                          <MapPin className="w-3 h-3 text-slate-400" />
                           <span className="truncate">{s.address}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
                     <div>
                       <div className="text-[10px] text-slate-500">Payable Balance:</div>
-                      <div className="text-sm font-extrabold font-mono text-rose-400">
+                      <div className="text-sm font-extrabold font-mono text-rose-600">
                         {currencySymbol} {s.payableBalance}
                       </div>
                     </div>
@@ -212,7 +212,7 @@ export default function SuppliersPage() {
                           notes: ''
                         })
                       }
-                      className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-bold text-xs text-emerald-400 transition-colors"
+                      className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200 font-bold text-xs text-emerald-700 transition-colors"
                     >
                       Pay Voucher
                     </button>

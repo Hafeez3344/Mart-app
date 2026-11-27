@@ -183,14 +183,27 @@ const createPurchaseInvoice = async (req, res) => {
     else if (parsedPaid > 0) paymentStatus = 'PARTIAL';
 
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Restock products and update cost price
+      // 1. Restock products and update cost price (handling Multi-Unit conversions: Carton, Pack/Box, Piece)
       for (const item of items) {
         if (item.productId) {
+          const product = await tx.product.findUnique({ where: { id: item.productId } });
+          let unitMultiplier = 1;
+          if (product) {
+            const itemUnit = (item.unit || '').toLowerCase();
+            if (itemUnit.includes('carton') || itemUnit.includes('ctn')) {
+              unitMultiplier = (product.piecesPerPack || 1) * (product.packsPerCarton || 1);
+            } else if (itemUnit.includes('pack') || itemUnit.includes('box') || itemUnit.includes('dabbi')) {
+              unitMultiplier = product.piecesPerPack || 1;
+            }
+          }
+
+          const addedQty = (parseFloat(item.quantity) || 1) * unitMultiplier;
           const updateData = {
-            stockQuantity: { increment: parseFloat(item.quantity) || 1 }
+            stockQuantity: { increment: addedQty }
           };
           if (item.unitCost && parseFloat(item.unitCost) > 0) {
-            updateData.costPrice = parseFloat(item.unitCost);
+            // Store the per-base-piece cost
+            updateData.costPrice = parseFloat(item.unitCost) / unitMultiplier;
           }
           if (item.retailPrice && parseFloat(item.retailPrice) > 0) {
             updateData.retailPrice = parseFloat(item.retailPrice);

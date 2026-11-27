@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { optionalAuth } = require('../middleware/auth');
+const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const {
   getAllExpenses,
   createExpense,
@@ -9,10 +9,13 @@ const {
   getExpenseStats
 } = require('../controllers/expenseController');
 
-router.get('/', optionalAuth, getAllExpenses);
-router.get('/stats', optionalAuth, getExpenseStats);
-router.post('/', optionalAuth, createExpense);
-router.put('/:id', optionalAuth, updateExpense);
-router.delete('/:id', optionalAuth, deleteExpense);
+router.use(authenticateToken);
+router.use(authorizeRoles('ADMIN', 'MANAGER', 'ACCOUNTANT'));
+
+router.get('/', getAllExpenses);
+router.get('/stats', getExpenseStats);
+router.post('/', createExpense);
+router.put('/:id', updateExpense);
+router.delete('/:id', deleteExpense);
 
 module.exports = router;

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+import RoleGuard from '../../components/RoleGuard';
 import api from '../../lib/api';
 import { useStore } from '../../context/StoreContext';
 import {
@@ -109,7 +110,24 @@ export default function PurchasesPage() {
         ...updated[idx],
         productId: value,
         unitCost: prod?.costPrice || 0,
-        unit: prod?.unit || 'Pcs'
+        unit: 'Pcs'
+      };
+    } else if (field === 'unit') {
+      const prod = products.find(p => p.id === updated[idx].productId);
+      const piecesPerPack = prod?.piecesPerPack || 1;
+      const packsPerCarton = prod?.packsPerCarton || 1;
+      const piecesPerCarton = piecesPerPack * packsPerCarton;
+
+      let estimatedCost = prod?.costPrice || 0;
+      if (value === 'Carton') {
+        estimatedCost = (prod?.costPrice || 0) * piecesPerCarton;
+      } else if (value === 'Pack' || value === 'Box') {
+        estimatedCost = (prod?.costPrice || 0) * piecesPerPack;
+      }
+      updated[idx] = {
+        ...updated[idx],
+        unit: value,
+        unitCost: estimatedCost > 0 ? estimatedCost : updated[idx].unitCost
       };
     } else {
       updated[idx][field] = value;
@@ -172,7 +190,8 @@ export default function PurchasesPage() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Header />
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+        <RoleGuard allowedRoles={['ADMIN', 'MANAGER', 'STOCK_KEEPER', 'ACCOUNTANT']}>
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
@@ -263,6 +282,7 @@ export default function PurchasesPage() {
             </div>
           </div>
         </div>
+        </RoleGuard>
       </div>
 
       {/* =========================================
@@ -334,6 +354,17 @@ export default function PurchasesPage() {
                             {p.name} ({p.barcode || p.sku})
                           </option>
                         ))}
+                      </select>
+
+                      {/* Unit */}
+                      <select
+                        value={row.unit || 'Pcs'}
+                        onChange={(e) => handleItemChange(idx, 'unit', e.target.value)}
+                        className="w-24 px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500"
+                      >
+                        <option value="Pcs">Piece</option>
+                        <option value="Pack">Box</option>
+                        <option value="Carton">Carton</option>
                       </select>
 
                       {/* Quantity */}

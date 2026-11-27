@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+import RoleGuard from '../../components/RoleGuard';
 import api from '../../lib/api';
 import { useStore } from '../../context/StoreContext';
 import {
@@ -115,7 +116,8 @@ export default function SalariesPage() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Header />
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+        <RoleGuard allowedRoles={['ADMIN']}>
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
@@ -212,6 +214,7 @@ export default function SalariesPage() {
             </div>
           </div>
         </div>
+        </RoleGuard>
       </div>
 
       {/* =========================================

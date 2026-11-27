@@ -50,6 +50,12 @@ export default function ProductsPage() {
     costPrice: '',
     retailPrice: '',
     wholesalePrice: '',
+    piecesPerPack: '1',
+    packPrice: '',
+    packBarcode: '',
+    packsPerCarton: '1',
+    cartonPrice: '',
+    cartonBarcode: '',
     stockQuantity: '',
     minStockAlert: '10',
     unit: 'Pcs',
@@ -102,6 +108,12 @@ export default function ProductsPage() {
       costPrice: '',
       retailPrice: '',
       wholesalePrice: '',
+      piecesPerPack: '1',
+      packPrice: '',
+      packBarcode: '',
+      packsPerCarton: '1',
+      cartonPrice: '',
+      cartonBarcode: '',
       stockQuantity: '0',
       minStockAlert: '10',
       unit: 'Pcs',
@@ -124,6 +136,12 @@ export default function ProductsPage() {
       costPrice: p.costPrice !== undefined ? p.costPrice.toString() : '',
       retailPrice: p.retailPrice !== undefined ? p.retailPrice.toString() : '',
       wholesalePrice: p.wholesalePrice ? p.wholesalePrice.toString() : '',
+      piecesPerPack: p.piecesPerPack ? p.piecesPerPack.toString() : '1',
+      packPrice: p.packPrice ? p.packPrice.toString() : '',
+      packBarcode: p.packBarcode || '',
+      packsPerCarton: p.packsPerCarton ? p.packsPerCarton.toString() : '1',
+      cartonPrice: p.cartonPrice ? p.cartonPrice.toString() : '',
+      cartonBarcode: p.cartonBarcode || '',
       stockQuantity: p.stockQuantity !== undefined ? p.stockQuantity.toString() : '0',
       minStockAlert: p.minStockAlert !== undefined ? p.minStockAlert.toString() : '10',
       unit: p.unit || 'Pcs',
@@ -322,6 +340,20 @@ export default function ProductsPage() {
                             <div className="font-bold text-slate-900 text-xs">{p.name}</div>
                             {p.brand && (
                               <div className="text-[10px] text-slate-400">{p.brand}</div>
+                            )}
+                            {(p.piecesPerPack > 1 || p.packsPerCarton > 1) && (
+                              <div className="mt-1 flex flex-wrap gap-1 text-[9px] font-medium text-slate-500">
+                                {p.piecesPerPack > 1 && (
+                                  <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-200">
+                                    Box: {p.piecesPerPack} {p.unit} ({currencySymbol}{p.packPrice || '—'})
+                                  </span>
+                                )}
+                                {p.packsPerCarton > 1 && (
+                                  <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded border border-purple-200">
+                                    Carton: {p.packsPerCarton} Boxes = {p.piecesPerPack * p.packsPerCarton} {p.unit} ({currencySymbol}{p.cartonPrice || '—'})
+                                  </span>
+                                )}
+                              </div>
                             )}
                           </td>
                           <td className="p-3 text-slate-600">
@@ -575,6 +607,136 @@ export default function ProductsPage() {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                {/* 3-Tier Multi-Unit Packaging (Carton -> Box -> Piece) */}
+                <div className="col-span-2 p-4 bg-emerald-50/70 border border-emerald-200/90 rounded-2xl mt-1">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Package className="w-4 h-4 text-emerald-600" />
+                      <span className="text-xs font-bold text-emerald-950">
+                        3-Tier Packaging Hierarchy (Carton ➔ Box/Dabbi ➔ Piece)
+                      </span>
+                    </div>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">
+                      Wholesale & Retail
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    {/* Tier 2: Box / Dabbi */}
+                    <div className="p-3 bg-white border border-emerald-100 rounded-xl space-y-2 shadow-2xs">
+                      <div className="font-bold text-slate-800 flex items-center justify-between">
+                        <span>📦 Box / Dabbi (Pack)</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Inner pack</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Pieces in 1 Box</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={form.piecesPerPack}
+                            onChange={(e) => setForm({ ...form, piecesPerPack: e.target.value })}
+                            placeholder="e.g. 50"
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Box Sell Price ({currencySymbol})</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={form.packPrice}
+                            onChange={(e) => setForm({ ...form, packPrice: e.target.value })}
+                            placeholder="e.g. 230"
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-emerald-700"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Box Barcode (Optional)</label>
+                        <input
+                          type="text"
+                          value={form.packBarcode}
+                          onChange={(e) => setForm({ ...form, packBarcode: e.target.value })}
+                          placeholder="Scan barcode on box"
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Tier 3: Full Carton */}
+                    <div className="p-3 bg-white border border-emerald-100 rounded-xl space-y-2 shadow-2xs">
+                      <div className="font-bold text-slate-800 flex items-center justify-between">
+                        <span>📦 Full Carton (Bulk)</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Outer wholesale box</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Boxes in 1 Carton</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={form.packsPerCarton}
+                            onChange={(e) => setForm({ ...form, packsPerCarton: e.target.value })}
+                            placeholder="e.g. 10"
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Carton Sell Price ({currencySymbol})</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={form.cartonPrice}
+                            onChange={(e) => setForm({ ...form, cartonPrice: e.target.value })}
+                            placeholder="e.g. 2200"
+                            className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-emerald-700"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">Carton Barcode (Optional)</label>
+                        <input
+                          type="text"
+                          value={form.cartonBarcode}
+                          onChange={(e) => setForm({ ...form, cartonBarcode: e.target.value })}
+                          placeholder="Scan barcode on carton"
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Carton Breakdown Calculator */}
+                  <div className="mt-3 p-2.5 bg-white/90 rounded-xl border border-emerald-100 flex items-center justify-between gap-3 text-xs">
+                    <div className="text-[11px] text-slate-600">
+                      💡 <strong>Carton Cost Helper:</strong> Total in 1 carton = <span className="font-bold text-emerald-700">{(parseFloat(form.piecesPerPack) || 1) * (parseFloat(form.packsPerCarton) || 1)} {form.unit || 'pieces'}</span>.
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        placeholder="Carton Cost"
+                        id="quickCartonCostInput"
+                        className="w-28 px-2 py-1 text-xs border border-slate-300 rounded-lg bg-slate-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = parseFloat(document.getElementById('quickCartonCostInput')?.value);
+                          const totalPieces = (parseFloat(form.piecesPerPack) || 1) * (parseFloat(form.packsPerCarton) || 1);
+                          if (val > 0 && totalPieces > 0) {
+                            const pieceCost = (val / totalPieces).toFixed(2);
+                            setForm(prev => ({ ...prev, costPrice: pieceCost }));
+                          }
+                        }}
+                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition-colors"
+                      >
+                        Auto-Set Piece Cost
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 

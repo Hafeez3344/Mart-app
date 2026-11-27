@@ -183,7 +183,9 @@ const getProductByBarcode = async (req, res) => {
         isActive: true,
         OR: [
           { barcode: cleanBarcode },
-          { sku: cleanBarcode }
+          { sku: cleanBarcode },
+          { packBarcode: cleanBarcode },
+          { cartonBarcode: cleanBarcode }
         ]
       }
     });
@@ -192,7 +194,21 @@ const getProductByBarcode = async (req, res) => {
       return res.status(404).json({ success: false, message: `No product found for barcode '${cleanBarcode}'.` });
     }
 
-    return res.status(200).json({ success: true, product });
+    let matchedUnit = 'Pcs';
+    let matchedPrice = product.retailPrice;
+    if (product.cartonBarcode && cleanBarcode === product.cartonBarcode) {
+      matchedUnit = 'Carton';
+      matchedPrice = product.cartonPrice && product.cartonPrice > 0
+        ? product.cartonPrice
+        : (product.retailPrice * (product.piecesPerPack || 1) * (product.packsPerCarton || 1));
+    } else if (product.packBarcode && cleanBarcode === product.packBarcode) {
+      matchedUnit = 'Pack';
+      matchedPrice = product.packPrice && product.packPrice > 0
+        ? product.packPrice
+        : (product.retailPrice * (product.piecesPerPack || 1));
+    }
+
+    return res.status(200).json({ success: true, product: { ...product, matchedUnit, matchedPrice } });
   } catch (error) {
     console.error('getProductByBarcode error:', error);
     return res.status(500).json({ success: false, message: 'Failed to scan product.' });
@@ -211,6 +227,12 @@ const createProduct = async (req, res) => {
       costPrice,
       retailPrice,
       wholesalePrice,
+      piecesPerPack,
+      packPrice,
+      packBarcode,
+      packsPerCarton,
+      cartonPrice,
+      cartonBarcode,
       stockQuantity,
       minStockAlert,
       unit,
@@ -256,6 +278,12 @@ const createProduct = async (req, res) => {
         costPrice: parseFloat(costPrice) || 0,
         retailPrice: parseFloat(retailPrice) || 0,
         wholesalePrice: wholesalePrice ? parseFloat(wholesalePrice) : null,
+        piecesPerPack: piecesPerPack ? (parseFloat(piecesPerPack) || 1) : 1,
+        packPrice: packPrice ? (parseFloat(packPrice) || 0) : 0,
+        packBarcode: packBarcode ? packBarcode.trim() : null,
+        packsPerCarton: packsPerCarton ? (parseFloat(packsPerCarton) || 1) : 1,
+        cartonPrice: cartonPrice ? (parseFloat(cartonPrice) || 0) : 0,
+        cartonBarcode: cartonBarcode ? cartonBarcode.trim() : null,
         stockQuantity: parseFloat(stockQuantity) || 0,
         minStockAlert: minStockAlert !== undefined ? parseFloat(minStockAlert) : 10,
         unit: unit?.trim() || 'Pcs',
@@ -290,6 +318,12 @@ const updateProduct = async (req, res) => {
       costPrice,
       retailPrice,
       wholesalePrice,
+      piecesPerPack,
+      packPrice,
+      packBarcode,
+      packsPerCarton,
+      cartonPrice,
+      cartonBarcode,
       stockQuantity,
       minStockAlert,
       unit,
@@ -315,6 +349,12 @@ const updateProduct = async (req, res) => {
     if (costPrice !== undefined) updateData.costPrice = parseFloat(costPrice) || 0;
     if (retailPrice !== undefined) updateData.retailPrice = parseFloat(retailPrice) || 0;
     if (wholesalePrice !== undefined) updateData.wholesalePrice = parseFloat(wholesalePrice) || 0;
+    if (piecesPerPack !== undefined) updateData.piecesPerPack = piecesPerPack ? (parseFloat(piecesPerPack) || 1) : 1;
+    if (packPrice !== undefined) updateData.packPrice = packPrice ? (parseFloat(packPrice) || 0) : 0;
+    if (packBarcode !== undefined) updateData.packBarcode = packBarcode ? packBarcode.trim() : null;
+    if (packsPerCarton !== undefined) updateData.packsPerCarton = packsPerCarton ? (parseFloat(packsPerCarton) || 1) : 1;
+    if (cartonPrice !== undefined) updateData.cartonPrice = cartonPrice ? (parseFloat(cartonPrice) || 0) : 0;
+    if (cartonBarcode !== undefined) updateData.cartonBarcode = cartonBarcode ? cartonBarcode.trim() : null;
     if (stockQuantity !== undefined) updateData.stockQuantity = parseFloat(stockQuantity) || 0;
     if (minStockAlert !== undefined) updateData.minStockAlert = parseFloat(minStockAlert) || 0;
     if (unit !== undefined) updateData.unit = unit.trim();

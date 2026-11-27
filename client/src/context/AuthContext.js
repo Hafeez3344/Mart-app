@@ -82,19 +82,21 @@ export const AuthProvider = ({ children }) => {
 
         const role = res.data.user.role;
         let targetPath = '/pos';
-        if (role === 'ADMIN' || role === 'MANAGER') {
+        if (role === 'ADMIN') {
           targetPath = '/admin';
+        } else if (role === 'MANAGER') {
+          targetPath = '/products';
         } else if (role === 'CASHIER') {
           targetPath = '/pos';
         } else if (role === 'STOCK_KEEPER') {
           targetPath = '/products';
         } else if (role === 'ACCOUNTANT') {
-          targetPath = '/expenses';
+          targetPath = '/reports';
         } else {
           targetPath = '/pos';
         }
 
-        router.push(targetPath);
+        router.replace(targetPath);
         return { success: true };
       }
 

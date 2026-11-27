@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { useHospital } from '../../context/StoreContext';
@@ -49,7 +49,7 @@ const QUICK_ROLES = [
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, loading: authLoading } = useAuth();
   const { storeName, tagline } = useHospital();
 
   const [email, setEmail] = useState('cashier@mart.com');
@@ -57,6 +57,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Redirect already authenticated users away from /login
+  useEffect(() => {
+    if (!authLoading && user) {
+      const role = user.role;
+      let targetPath = '/pos';
+      if (role === 'ADMIN') targetPath = '/admin';
+      else if (role === 'MANAGER' || role === 'STOCK_KEEPER') targetPath = '/products';
+      else if (role === 'ACCOUNTANT') targetPath = '/reports';
+      router.replace(targetPath);
+    }
+  }, [user, authLoading, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

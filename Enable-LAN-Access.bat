@@ -1,3 +1,4 @@
+
 @echo off
 title Enable Hotspot Access for SuperMart POS
 color 0A

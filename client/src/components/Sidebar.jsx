@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
@@ -34,6 +34,17 @@ import {
 
 const NAVIGATION_GROUPS = [
   {
+    title: 'Executive Overview',
+    items: [
+      {
+        name: 'Admin Dashboard',
+        href: '/admin',
+        icon: LayoutDashboard,
+        roles: ['ADMIN']
+      }
+    ]
+  },
+  {
     title: 'Checkout & Sales',
     items: [
       {
@@ -41,17 +52,20 @@ const NAVIGATION_GROUPS = [
         href: '/pos',
         icon: ShoppingCart,
         badge: 'F1',
-        highlight: true
+        highlight: true,
+        roles: ['ADMIN', 'MANAGER', 'CASHIER']
       },
       {
         name: 'Sales Invoices',
         href: '/sales',
-        icon: Receipt
+        icon: Receipt,
+        roles: ['ADMIN', 'MANAGER', 'CASHIER']
       },
       {
         name: 'Cash Register',
         href: '/register',
-        icon: Banknote
+        icon: Banknote,
+        roles: ['ADMIN', 'MANAGER', 'CASHIER']
       }
     ]
   },
@@ -61,12 +75,14 @@ const NAVIGATION_GROUPS = [
       {
         name: 'Products & Stock',
         href: '/products',
-        icon: Package
+        icon: Package,
+        roles: ['ADMIN', 'MANAGER', 'STOCK_KEEPER']
       },
       {
         name: 'Categories',
         href: '/categories',
-        icon: Tag
+        icon: Tag,
+        roles: ['ADMIN', 'MANAGER', 'STOCK_KEEPER']
       }
     ]
   },
@@ -76,12 +92,14 @@ const NAVIGATION_GROUPS = [
       {
         name: 'Purchases (Stock-In)',
         href: '/purchases',
-        icon: ClipboardList
+        icon: ClipboardList,
+        roles: ['ADMIN', 'MANAGER', 'STOCK_KEEPER', 'ACCOUNTANT']
       },
       {
         name: 'Suppliers & Ledger',
         href: '/suppliers',
-        icon: Truck
+        icon: Truck,
+        roles: ['ADMIN', 'MANAGER', 'STOCK_KEEPER', 'ACCOUNTANT']
       }
     ]
   },
@@ -91,7 +109,8 @@ const NAVIGATION_GROUPS = [
       {
         name: 'Customer Khata',
         href: '/customers',
-        icon: Users
+        icon: Users,
+        roles: ['ADMIN', 'MANAGER', 'CASHIER', 'ACCOUNTANT']
       }
     ]
   },
@@ -101,17 +120,20 @@ const NAVIGATION_GROUPS = [
       {
         name: 'Daily Expenses',
         href: '/expenses',
-        icon: DollarSign
+        icon: DollarSign,
+        roles: ['ADMIN', 'MANAGER', 'ACCOUNTANT']
       },
       {
         name: 'Staff & Salaries',
         href: '/salaries',
-        icon: CircleDollarSign
+        icon: CircleDollarSign,
+        roles: ['ADMIN']
       },
       {
         name: 'Sales & Profit Reports',
         href: '/reports',
-        icon: BarChart3
+        icon: BarChart3,
+        roles: ['ADMIN', 'MANAGER', 'ACCOUNTANT']
       }
     ]
   },
@@ -119,14 +141,10 @@ const NAVIGATION_GROUPS = [
     title: 'Store Management',
     items: [
       {
-        name: 'Admin Dashboard',
-        href: '/admin',
-        icon: LayoutDashboard
-      },
-      {
         name: 'Mart Settings',
         href: '/settings',
-        icon: Settings
+        icon: Settings,
+        roles: ['ADMIN']
       }
     ]
   }
@@ -137,6 +155,34 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
   const { isOpen, closeSidebar } = useSidebar();
   const { storeName } = useStore();
+  const navScrollRef = useRef(null);
+
+  // Preserve sidebar scroll position across page navigation
+  useEffect(() => {
+    const el = navScrollRef.current;
+    if (!el) return;
+    const saved = sessionStorage.getItem('mart_sidebar_scroll');
+    if (saved) {
+      el.scrollTop = parseInt(saved, 10) || 0;
+    }
+  }, [pathname]);
+
+  const handleNavScroll = () => {
+    if (navScrollRef.current) {
+      sessionStorage.setItem('mart_sidebar_scroll', navScrollRef.current.scrollTop.toString());
+    }
+  };
+
+  const userRole = (user?.role || 'CASHIER').toUpperCase();
+
+  // Filter groups and items strictly according to user's assigned role
+  const visibleGroups = NAVIGATION_GROUPS.map((group) => {
+    const visibleItems = group.items.filter((item) => {
+      if (!item.roles || userRole === 'ADMIN') return true;
+      return item.roles.includes(userRole);
+    });
+    return { ...group, items: visibleItems };
+  }).filter((group) => group.items.length > 0);
 
   const isLinkActive = (href) => {
     if (href === '/pos' && pathname === '/pos') return true;
@@ -186,8 +232,12 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation Groups List */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200">
-          {NAVIGATION_GROUPS.map((group, groupIdx) => (
+        <div
+          ref={navScrollRef}
+          onScroll={handleNavScroll}
+          className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200"
+        >
+          {visibleGroups.map((group, groupIdx) => (
             <div key={groupIdx} className="space-y-1">
               <div className="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">
                 {group.title}
@@ -249,15 +299,27 @@ export default function Sidebar() {
         <div className="p-3 border-t border-slate-200 bg-slate-50/80">
           <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200 shadow-xs">
             <div className="flex items-center gap-2.5 truncate">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 font-black text-xs flex items-center justify-center shrink-0">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'C'}
+              <div className={`w-8 h-8 rounded-lg font-black text-xs flex items-center justify-center shrink-0 ${
+                userRole === 'ADMIN'
+                  ? 'bg-indigo-100 text-indigo-700'
+                  : userRole === 'MANAGER'
+                  ? 'bg-amber-100 text-amber-700'
+                  : 'bg-emerald-100 text-emerald-700'
+              }`}>
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
               <div className="flex flex-col truncate">
                 <span className="text-xs font-bold text-slate-800 truncate">
-                  {user?.name || 'Cashier'}
+                  {user?.name || 'Staff User'}
                 </span>
-                <span className="text-[10px] font-medium text-slate-400 truncate">
-                  {user?.role || 'CASHIER'}
+                <span className={`text-[9px] font-bold uppercase tracking-wider truncate px-1.5 py-0.5 rounded w-fit mt-0.5 ${
+                  userRole === 'ADMIN'
+                    ? 'bg-indigo-50 text-indigo-700'
+                    : userRole === 'MANAGER'
+                    ? 'bg-amber-50 text-amber-700'
+                    : 'bg-emerald-50 text-emerald-700'
+                }`}>
+                  {userRole} PANEL
                 </span>
               </div>
             </div>

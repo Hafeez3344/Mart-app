@@ -197,12 +197,22 @@ export default function PosTerminalPage() {
     if (!barcodeInput || !barcodeInput.trim()) return;
 
     const code = barcodeInput.trim();
+    const lowerCode = code.toLowerCase();
     const found = products.find(
-      p => p.barcode?.toLowerCase() === code.toLowerCase() || p.sku?.toLowerCase() === code.toLowerCase()
+      p => p.barcode?.toLowerCase() === lowerCode ||
+           p.sku?.toLowerCase() === lowerCode ||
+           p.packBarcode?.toLowerCase() === lowerCode ||
+           p.cartonBarcode?.toLowerCase() === lowerCode
     );
 
     if (found) {
-      addToCart(found);
+      let matchedUnit = 'Pcs';
+      if (found.cartonBarcode && found.cartonBarcode.toLowerCase() === lowerCode) {
+        matchedUnit = 'Carton';
+      } else if (found.packBarcode && found.packBarcode.toLowerCase() === lowerCode) {
+        matchedUnit = 'Pack';
+      }
+      addToCart({ ...found, matchedUnit }, matchedUnit);
       playBeep();
       setBarcodeInput('');
     } else {
@@ -210,7 +220,7 @@ export default function PosTerminalPage() {
       api.get(`/products/barcode/${code}`)
         .then(res => {
           if (res.data?.success && res.data.product) {
-            addToCart(res.data.product);
+            addToCart(res.data.product, res.data.product.matchedUnit);
             playBeep();
             setBarcodeInput('');
           } else {
@@ -223,13 +233,38 @@ export default function PosTerminalPage() {
     }
   };
 
-  // Add Item to Cart
-  const addToCart = (product) => {
+  // Add Item to Cart (Supports 3-Tier Multi-Unit: Piece, Box/Pack, Carton)
+  const addToCart = (product, targetUnit = null) => {
+    const piecesPerPack = product.piecesPerPack || 1;
+    const packsPerCarton = product.packsPerCarton || 1;
+    const piecesPerCarton = piecesPerPack * packsPerCarton;
+
+    let selectedUnit = targetUnit || product.matchedUnit || 'Pcs';
+    let unitPrice = product.retailPrice || 0;
+    let unitCost = product.costPrice || 0;
+
+    if (selectedUnit === 'Carton') {
+      unitPrice = product.cartonPrice && product.cartonPrice > 0
+        ? product.cartonPrice
+        : (product.retailPrice * piecesPerCarton);
+      unitCost = (product.costPrice || 0) * piecesPerCarton;
+    } else if (selectedUnit === 'Pack' || selectedUnit === 'Box') {
+      selectedUnit = 'Pack';
+      unitPrice = product.packPrice && product.packPrice > 0
+        ? product.packPrice
+        : (product.retailPrice * piecesPerPack);
+      unitCost = (product.costPrice || 0) * piecesPerPack;
+    } else {
+      selectedUnit = product.unit || 'Pcs';
+      unitPrice = product.retailPrice || 0;
+      unitCost = product.costPrice || 0;
+    }
+
     setCart(prev => {
-      const existing = prev.find(item => item.productId === product.id);
+      const existing = prev.find(item => item.productId === product.id && item.unit === selectedUnit);
       if (existing) {
         return prev.map(item =>
-          item.productId === product.id
+          item === existing
             ? {
                 ...item,
                 quantity: item.quantity + 1,
@@ -241,27 +276,76 @@ export default function PosTerminalPage() {
       return [
         ...prev,
         {
+          cartItemId: `${product.id}_${selectedUnit}_${Date.now()}`,
           productId: product.id,
           productName: product.name,
           barcode: product.barcode,
-          unit: product.unit || 'Pcs',
-          costPrice: product.costPrice || 0,
-          unitPrice: product.retailPrice || 0,
+          unit: selectedUnit,
+          productRef: product,
+          costPrice: unitCost,
+          unitPrice: unitPrice,
           quantity: 1,
           discount: 0,
-          totalPrice: product.retailPrice || 0,
+          totalPrice: unitPrice,
           stockQuantity: product.stockQuantity
         }
       ];
     });
   };
 
+  // Change Item Unit in Cart (Piece <-> Box <-> Carton)
+  const changeItemUnit = (cartItemId, newUnit) => {
+    setCart(prev =>
+      prev.map(item => {
+        if ((item.cartItemId && item.cartItemId === cartItemId) || item.productId === cartItemId) {
+          const product = item.productRef || products.find(p => p.id === item.productId);
+          if (!product) return item;
+
+          const piecesPerPack = product.piecesPerPack || 1;
+          const packsPerCarton = product.packsPerCarton || 1;
+          const piecesPerCarton = piecesPerPack * packsPerCarton;
+
+          let newUnitPrice = product.retailPrice || 0;
+          let newUnitCost = product.costPrice || 0;
+          let cleanUnit = newUnit;
+
+          if (newUnit === 'Carton') {
+            cleanUnit = 'Carton';
+            newUnitPrice = product.cartonPrice && product.cartonPrice > 0
+              ? product.cartonPrice
+              : (product.retailPrice * piecesPerCarton);
+            newUnitCost = (product.costPrice || 0) * piecesPerCarton;
+          } else if (newUnit === 'Pack' || newUnit === 'Box') {
+            cleanUnit = 'Pack';
+            newUnitPrice = product.packPrice && product.packPrice > 0
+              ? product.packPrice
+              : (product.retailPrice * piecesPerPack);
+            newUnitCost = (product.costPrice || 0) * piecesPerPack;
+          } else {
+            cleanUnit = product.unit || 'Pcs';
+            newUnitPrice = product.retailPrice || 0;
+            newUnitCost = product.costPrice || 0;
+          }
+
+          return {
+            ...item,
+            unit: cleanUnit,
+            unitPrice: newUnitPrice,
+            costPrice: newUnitCost,
+            totalPrice: item.quantity * newUnitPrice - (item.discount || 0)
+          };
+        }
+        return item;
+      })
+    );
+  };
+
   // Update Cart Item Quantity
-  const updateQuantity = (productId, delta) => {
+  const updateQuantity = (cartItemId, delta) => {
     setCart(prev =>
       prev
         .map(item => {
-          if (item.productId === productId) {
+          if ((item.cartItemId && item.cartItemId === cartItemId) || item.productId === cartItemId) {
             const newQty = Math.max(1, item.quantity + delta);
             return {
               ...item,
@@ -275,8 +359,8 @@ export default function PosTerminalPage() {
   };
 
   // Remove Item from Cart
-  const removeFromCart = (productId) => {
-    setCart(prev => prev.filter(item => item.productId !== productId));
+  const removeFromCart = (cartItemId) => {
+    setCart(prev => prev.filter(item => (item.cartItemId ? item.cartItemId !== cartItemId : item.productId !== cartItemId)));
   };
 
   // Cart Calculations
@@ -657,56 +741,111 @@ export default function PosTerminalPage() {
                   <p className="text-[10px] text-slate-400">Scan barcodes or click items to add</p>
                 </div>
               ) : (
-                cart.map((item) => (
-                  <div
-                    key={item.productId}
-                    className="p-2.5 rounded-xl bg-white hover:bg-slate-50/80 border border-slate-200 flex items-center justify-between gap-2 shadow-2xs transition-colors"
-                  >
-                    {/* Item Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-bold text-slate-900 truncate">
-                        {item.productName}
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-medium flex items-center gap-2 mt-0.5">
-                        <span className="text-emerald-700 font-bold">{currencySymbol} {item.unitPrice}</span>
-                        <span>•</span>
-                        <span className="font-mono text-slate-400">{item.barcode}</span>
-                      </div>
-                    </div>
+                cart.map((item) => {
+                  const pRef = item.productRef || products.find(p => p.id === item.productId);
+                  const hasPackaging = pRef && ((pRef.piecesPerPack && pRef.piecesPerPack > 1) || (pRef.packsPerCarton && pRef.packsPerCarton > 1));
+                  const itemId = item.cartItemId || item.productId;
 
-                    {/* Quantity Modifiers */}
-                    <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-lg p-0.5">
-                      <button
-                        onClick={() => updateQuantity(item.productId, -1)}
-                        className="w-6 h-6 rounded bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
-                      >
-                        <Minus className="w-3 h-3 stroke-[2.5]" />
-                      </button>
-                      <span className="w-7 text-center font-black text-xs text-slate-900">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(item.productId, 1)}
-                        className="w-6 h-6 rounded bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
-                      >
-                        <Plus className="w-3 h-3 stroke-[2.5]" />
-                      </button>
-                    </div>
+                  return (
+                    <div
+                      key={itemId}
+                      className="p-2.5 rounded-xl bg-white hover:bg-slate-50/80 border border-slate-200 flex flex-col gap-1.5 shadow-2xs transition-colors"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        {/* Item Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-bold text-slate-900 truncate flex items-center gap-1.5">
+                            <span>{item.productName}</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200">
+                              {item.unit}
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-slate-500 font-medium flex items-center gap-2 mt-0.5">
+                            <span className="text-emerald-700 font-bold">{currencySymbol} {item.unitPrice} / {item.unit}</span>
+                            <span>•</span>
+                            <span className="font-mono text-slate-400">{item.barcode}</span>
+                          </div>
+                        </div>
 
-                    {/* Total & Remove */}
-                    <div className="text-right flex items-center gap-2 shrink-0">
-                      <div className="text-xs font-black text-slate-900 font-mono">
-                        {currencySymbol} {item.totalPrice}
+                        {/* Quantity Modifiers */}
+                        <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-lg p-0.5">
+                          <button
+                            onClick={() => updateQuantity(itemId, -1)}
+                            className="w-6 h-6 rounded bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
+                          >
+                            <Minus className="w-3 h-3 stroke-[2.5]" />
+                          </button>
+                          <span className="w-7 text-center font-black text-xs text-slate-900">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(itemId, 1)}
+                            className="w-6 h-6 rounded bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors active:scale-95 shadow-2xs"
+                          >
+                            <Plus className="w-3 h-3 stroke-[2.5]" />
+                          </button>
+                        </div>
+
+                        {/* Total & Remove */}
+                        <div className="text-right flex items-center gap-2 shrink-0">
+                          <div className="text-xs font-black text-slate-900 font-mono">
+                            {currencySymbol} {item.totalPrice}
+                          </div>
+                          <button
+                            onClick={() => removeFromCart(itemId)}
+                            className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => removeFromCart(item.productId)}
-                        className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+
+                      {/* Multi-Unit Switcher Pills */}
+                      {hasPackaging && (
+                        <div className="flex items-center gap-1.5 pt-1 border-t border-slate-100 text-[10px]">
+                          <span className="text-slate-400 font-medium">Unit:</span>
+                          <button
+                            type="button"
+                            onClick={() => changeItemUnit(itemId, 'Pcs')}
+                            className={`px-2 py-0.5 rounded font-bold transition-all ${
+                              item.unit !== 'Pack' && item.unit !== 'Carton'
+                                ? 'bg-emerald-600 text-white shadow-2xs'
+                                : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                            }`}
+                          >
+                            Piece
+                          </button>
+                          {pRef.piecesPerPack > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => changeItemUnit(itemId, 'Pack')}
+                              className={`px-2 py-0.5 rounded font-bold transition-all ${
+                                item.unit === 'Pack'
+                                  ? 'bg-blue-600 text-white shadow-2xs'
+                                  : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'
+                              }`}
+                            >
+                              Box ({pRef.piecesPerPack} pcs)
+                            </button>
+                          )}
+                          {pRef.packsPerCarton > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => changeItemUnit(itemId, 'Carton')}
+                              className={`px-2 py-0.5 rounded font-bold transition-all ${
+                                item.unit === 'Carton'
+                                  ? 'bg-purple-600 text-white shadow-2xs'
+                                  : 'bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200'
+                              }`}
+                            >
+                              Carton ({pRef.piecesPerPack * pRef.packsPerCarton} pcs)
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
 

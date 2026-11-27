@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { optionalAuth, authorizeRoles } = require('../middleware/auth');
+const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const {
   getAllStaff,
   createStaff,
@@ -29,36 +29,39 @@ const {
   deleteAdvance
 } = require('../controllers/advanceController');
 
-// Staff Attendance APIs
-router.get('/attendance', optionalAuth, getMonthlyAttendance);
-router.post('/attendance', optionalAuth, markAttendance);
-router.post('/attendance/bulk-mark', optionalAuth, bulkMarkAttendance);
+// All staff routes require authentication
+router.use(authenticateToken);
 
-// Staff Advances & Loans APIs
-router.get('/advances', optionalAuth, getAdvances);
-router.get('/:id/advance-balance', optionalAuth, getStaffAdvanceBalance);
-router.post('/:id/give-advance', optionalAuth, giveAdvance);
-router.put('/advances/:id', optionalAuth, updateAdvance);
-router.delete('/advances/:id', optionalAuth, deleteAdvance);
+// Staff Attendance APIs (Admin & Manager)
+router.get('/attendance', authorizeRoles('ADMIN', 'MANAGER'), getMonthlyAttendance);
+router.post('/attendance', authorizeRoles('ADMIN', 'MANAGER'), markAttendance);
+router.post('/attendance/bulk-mark', authorizeRoles('ADMIN', 'MANAGER'), bulkMarkAttendance);
 
-// Staff Profile (Protected for all logged-in staff)
-router.get('/profile', optionalAuth, getStaffProfile);
-router.get('/me', optionalAuth, getStaffProfile);
+// Staff Advances & Loans APIs (Admin Only)
+router.get('/advances', authorizeRoles('ADMIN'), getAdvances);
+router.get('/:id/advance-balance', authorizeRoles('ADMIN'), getStaffAdvanceBalance);
+router.post('/:id/give-advance', authorizeRoles('ADMIN'), giveAdvance);
+router.put('/advances/:id', authorizeRoles('ADMIN'), updateAdvance);
+router.delete('/advances/:id', authorizeRoles('ADMIN'), deleteAdvance);
 
-// Salary Disbursements, Attendance Summary & Payroll History
-router.get('/salaries/all', optionalAuth, getAllSalaryRecords);
-router.put('/salaries/:id', optionalAuth, updateSalaryRecord);
-router.delete('/salaries/:id', optionalAuth, deleteSalaryRecord);
-router.get('/:id/salary-summary', optionalAuth, getStaffSalarySummary);
-router.post('/:id/pay-salary', optionalAuth, payStaffSalary);
-router.post('/:id/salaries', optionalAuth, payStaffSalary);
-router.put('/:id/assign-salary', optionalAuth, assignSalary);
+// Staff Profile (Protected for self profile)
+router.get('/profile', getStaffProfile);
+router.get('/me', getStaffProfile);
 
-// Staff Directory Management CRUD
-router.get('/all', optionalAuth, getAllStaff);
-router.post('/', optionalAuth, createStaff);
-router.put('/:id', optionalAuth, updateStaff);
-router.delete('/:id', optionalAuth, deleteStaff);
+// Salary Disbursements, Attendance Summary & Payroll History (Admin Only)
+router.get('/salaries/all', authorizeRoles('ADMIN'), getAllSalaryRecords);
+router.put('/salaries/:id', authorizeRoles('ADMIN'), updateSalaryRecord);
+router.delete('/salaries/:id', authorizeRoles('ADMIN'), deleteSalaryRecord);
+router.get('/:id/salary-summary', authorizeRoles('ADMIN'), getStaffSalarySummary);
+router.post('/:id/pay-salary', authorizeRoles('ADMIN'), payStaffSalary);
+router.post('/:id/salaries', authorizeRoles('ADMIN'), payStaffSalary);
+router.put('/:id/assign-salary', authorizeRoles('ADMIN'), assignSalary);
+
+// Staff Directory Management CRUD (Admin Only)
+router.get('/all', authorizeRoles('ADMIN', 'MANAGER'), getAllStaff);
+router.post('/', authorizeRoles('ADMIN'), createStaff);
+router.put('/:id', authorizeRoles('ADMIN'), updateStaff);
+router.delete('/:id', authorizeRoles('ADMIN'), deleteStaff);
 
 module.exports = router;
 
