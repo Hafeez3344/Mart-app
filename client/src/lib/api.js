@@ -3,8 +3,8 @@ import axios from 'axios';
 // Helper to check if hostname is a local LAN IP (e.g. 192.168.x.x, 10.x.x.x)
 const isLocalLanIp = (hostname) => {
   return /^192\.168\.\d+\.\d+$/.test(hostname) ||
-         /^10\.\d+\.\d+\.\d+$/.test(hostname) ||
-         /^172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+$/.test(hostname);
+    /^10\.\d+\.\d+\.\d+$/.test(hostname) ||
+    /^172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+$/.test(hostname);
 };
 
 const getBaseUrl = () => {

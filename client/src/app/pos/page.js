@@ -122,7 +122,7 @@ export default function PosTerminalPage() {
         osc.start();
         osc.stop(audioBeep.currentTime + 0.1);
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   // Fetch Products & Parked Sales
@@ -200,9 +200,9 @@ export default function PosTerminalPage() {
     const lowerCode = code.toLowerCase();
     const found = products.find(
       p => p.barcode?.toLowerCase() === lowerCode ||
-           p.sku?.toLowerCase() === lowerCode ||
-           p.packBarcode?.toLowerCase() === lowerCode ||
-           p.cartonBarcode?.toLowerCase() === lowerCode
+        p.sku?.toLowerCase() === lowerCode ||
+        p.packBarcode?.toLowerCase() === lowerCode ||
+        p.cartonBarcode?.toLowerCase() === lowerCode
     );
 
     if (found) {
@@ -266,10 +266,10 @@ export default function PosTerminalPage() {
         return prev.map(item =>
           item === existing
             ? {
-                ...item,
-                quantity: item.quantity + 1,
-                totalPrice: (item.quantity + 1) * item.unitPrice
-              }
+              ...item,
+              quantity: item.quantity + 1,
+              totalPrice: (item.quantity + 1) * item.unitPrice
+            }
             : item
         );
       }
@@ -486,7 +486,7 @@ export default function PosTerminalPage() {
     setShowParkedModal(false);
 
     // Remove from backend parked list
-    api.delete(`/pos/parked/${sale.id}`).catch(() => {});
+    api.delete(`/pos/parked/${sale.id}`).catch(() => { });
     setParkedSales(prev => prev.filter(p => p.id !== sale.id));
   };
 
@@ -610,11 +610,10 @@ export default function PosTerminalPage() {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all ${
-                    selectedCategory === cat
-                      ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 font-extrabold'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
-                  }`}
+                  className={`px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all ${selectedCategory === cat
+                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 font-extrabold'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/80'
+                    }`}
                 >
                   {cat}
                 </button>
@@ -647,11 +646,10 @@ export default function PosTerminalPage() {
                             playBeep();
                           }
                         }}
-                        className={`p-3 rounded-2xl border transition-all text-left flex flex-col justify-between select-none group shadow-2xs ${
-                          isOutOfStock
-                            ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
-                            : 'bg-white hover:border-emerald-400 hover:shadow-md border-slate-200/90 cursor-pointer active:scale-[0.98]'
-                        }`}
+                        className={`p-3 rounded-2xl border transition-all text-left flex flex-col justify-between select-none group shadow-2xs ${isOutOfStock
+                          ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
+                          : 'bg-white hover:border-emerald-400 hover:shadow-md border-slate-200/90 cursor-pointer active:scale-[0.98]'
+                          }`}
                       >
                         <div>
                           {/* Top Stock Badge */}
@@ -660,13 +658,12 @@ export default function PosTerminalPage() {
                               {p.barcode || p.sku}
                             </span>
                             <span
-                              className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${
-                                isOutOfStock
-                                  ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                                  : isLowStock
+                              className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${isOutOfStock
+                                ? 'bg-rose-50 text-rose-600 border border-rose-200'
+                                : isLowStock
                                   ? 'bg-amber-50 text-amber-700 border border-amber-200'
                                   : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              }`}
+                                }`}
                             >
                               {p.stockQuantity} {p.unit}
                             </span>
@@ -807,11 +804,10 @@ export default function PosTerminalPage() {
                           <button
                             type="button"
                             onClick={() => changeItemUnit(itemId, 'Pcs')}
-                            className={`px-2 py-0.5 rounded font-bold transition-all ${
-                              item.unit !== 'Pack' && item.unit !== 'Carton'
-                                ? 'bg-emerald-600 text-white shadow-2xs'
-                                : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                            }`}
+                            className={`px-2 py-0.5 rounded font-bold transition-all ${item.unit !== 'Pack' && item.unit !== 'Carton'
+                              ? 'bg-emerald-600 text-white shadow-2xs'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                              }`}
                           >
                             Piece
                           </button>
@@ -819,11 +815,10 @@ export default function PosTerminalPage() {
                             <button
                               type="button"
                               onClick={() => changeItemUnit(itemId, 'Pack')}
-                              className={`px-2 py-0.5 rounded font-bold transition-all ${
-                                item.unit === 'Pack'
-                                  ? 'bg-blue-600 text-white shadow-2xs'
-                                  : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'
-                              }`}
+                              className={`px-2 py-0.5 rounded font-bold transition-all ${item.unit === 'Pack'
+                                ? 'bg-blue-600 text-white shadow-2xs'
+                                : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'
+                                }`}
                             >
                               Box ({pRef.piecesPerPack} pcs)
                             </button>
@@ -832,11 +827,10 @@ export default function PosTerminalPage() {
                             <button
                               type="button"
                               onClick={() => changeItemUnit(itemId, 'Carton')}
-                              className={`px-2 py-0.5 rounded font-bold transition-all ${
-                                item.unit === 'Carton'
-                                  ? 'bg-purple-600 text-white shadow-2xs'
-                                  : 'bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200'
-                              }`}
+                              className={`px-2 py-0.5 rounded font-bold transition-all ${item.unit === 'Carton'
+                                ? 'bg-purple-600 text-white shadow-2xs'
+                                : 'bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200'
+                                }`}
                             >
                               Carton ({pRef.piecesPerPack * pRef.packsPerCarton} pcs)
                             </button>
@@ -883,7 +877,7 @@ export default function PosTerminalPage() {
                     <span className="font-mono">- {currencySymbol} {discountAmount}</span>
                   </div>
                 )}
-                
+
                 {/* Big Net Payable Banner */}
                 <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-3.5 rounded-2xl shadow-md flex items-center justify-between mt-2">
                   <span className="text-xs font-black uppercase tracking-wider text-slate-300">TOTAL DUE:</span>
@@ -975,11 +969,10 @@ export default function PosTerminalPage() {
                         setShowCustomerSearch(true);
                       }
                     }}
-                    className={`p-3 rounded-2xl border text-center flex flex-col items-center gap-1.5 transition-all ${
-                      active
-                        ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs font-bold'
-                        : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:border-slate-300'
-                    }`}
+                    className={`p-3 rounded-2xl border text-center flex flex-col items-center gap-1.5 transition-all ${active
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-800 shadow-xs font-bold'
+                      : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:border-slate-300'
+                      }`}
                   >
                     <Icon className={`w-5 h-5 ${active ? 'text-emerald-600' : 'text-slate-400'}`} />
                     <span className="text-[11px] font-bold">{method.label}</span>
